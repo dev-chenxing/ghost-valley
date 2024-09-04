@@ -19,7 +19,7 @@ class UI:
 
     def update(self, deltaTime):
         text_surface = self.font.render(
-            f"铜钱{中文數字(中文數字(self.player.coins))}文", False, palette["烟墨"])
+            f"铜钱{中文數字(self.player.coins)}文", False, palette["烟墨"])
         text_rect = text_surface.get_rect(
             center=(self.viewport_width/2, self.viewport_height/2))
         self.surface.blit(text_surface, text_rect)
