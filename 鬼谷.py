@@ -2,7 +2,6 @@ import sys
 import pygame
 from crop import Crop
 from item_stack import ItemStack
-from lib.zhongwen.number import 中文數字
 from object import Object
 from palette import palette
 from reference import Reference
@@ -13,8 +12,15 @@ from player import Player
 
 class 鬼谷:
     def __init__(self):
+        pygame.init()
+        
+        pygame.display.set_caption('鬼谷三家村')
+        self.clock = pygame.time.Clock()
+        self.running = True
+
         self.ui = UI()
         self.menu = self.ui.create_menu()
+
         self.objects = []
 
         self.player = Player(id="player", name="新鬼")
@@ -83,35 +89,38 @@ class 鬼谷:
         ref.delete()
 
     def run(self):
-        clock = pygame.time.Clock()
+
         while True:
-            self.menu.add.label(title=f"铜钱{中文數字(self.player.coins)}文")
+            self.deltaTime = self.clock.tick() / 1000
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+            self.ui.update(self.deltaTime)
 
-            for item_stack in self.player.inventory:
-                button = self.menu.add.button(f"{item_stack.object.name}{中文數字(
-                    item_stack.count)}颗", selection_color=palette["烟墨"])
-
-                def _update_button() -> None:
-                    self.plant(item_stack.object)
-                    if (item_stack.count > 0):
-                        button.set_title(f"{item_stack.object.name}{
-                                         中文數字(item_stack.count)}颗")
-                    else:
-                        self.menu.remove_widget(button)
-                button.update_callback(_update_button)
-
-            for plant_ref in self.field:
-                button = self.menu.add.button(
-                    plant_ref.object.name, selection_color=palette["烟墨"])
-
-                def _update_button():
-                    self.harvest(plant_ref)
-                    self.menu.remove_widget(button)
-                button.update_callback(_update_button)
-
-            self.menu.mainloop(self.ui.screen)
             pygame.display.update()
-            clock.tick(60)  # limits FPS to 60
+
+            # for item_stack in self.player.inventory:
+            #     button = self.menu.add.button(f"{item_stack.object.name}{中文數字(
+            #         item_stack.count)}颗", selection_color=palette["烟墨"])
+
+            #     def _update_button() -> None:
+            #         self.plant(item_stack.object)
+            #         if (item_stack.count > 0):
+            #             button.set_title(f"{item_stack.object.name}{
+            #                              中文數字(item_stack.count)}颗")
+            #         else:
+            #             self.menu.remove_widget(button)
+            #     button.update_callback(_update_button)
+
+            # for plant_ref in self.field:
+            #     button = self.menu.add.button(
+            #         plant_ref.object.name, selection_color=palette["烟墨"])
+
+            #     def _update_button():
+            #         self.harvest(plant_ref)
+            #         self.menu.remove_widget(button)
+            #     button.update_callback(_update_button)
 
 
 def main():
