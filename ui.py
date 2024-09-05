@@ -1,5 +1,6 @@
 import pygame
 
+from game import Game
 from palette import palette
 from lib.zhongwen.number import 中文數字
 
@@ -17,9 +18,26 @@ class UI:
         self.screen.fill(palette["山矾"])
         return self.surface
 
-    def update(self, deltaTime):
+    def create_label(self, text, color, x, y):
         text_surface = self.font.render(
-            f"铜钱{中文數字(self.player.coins)}文", False, palette["烟墨"])
+            text, False, color)
         text_rect = text_surface.get_rect(
-            center=(self.viewport_width/2, self.viewport_height/2))
+            center=(x, y))
         self.surface.blit(text_surface, text_rect)
+
+    def update(self, deltaTime: float, game: Game):
+        self.create_label(text=f"铜钱{中文數字(game.player.coins)}文", color=palette["烟墨"],
+                          x=self.viewport_width/2, y=128)
+
+        for item_stack in game.player.inventory:
+            if (item_stack.count > 0):
+                self.create_label(text=f"{item_stack.object.name}{中文數字(
+                    item_stack.count)}颗", color=palette["烟墨"],
+                    x=self.viewport_width/2, y=256)
+                # game.plant(item_stack.object)
+
+        for plant_ref in game.field:
+            self.create_label(text=plant_ref.object.name, color=palette["烟墨"],
+                              x=self.viewport_width/2, y=384)
+
+            # game.harvest(plant_ref)
