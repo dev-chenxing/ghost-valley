@@ -13,7 +13,6 @@ class 鬼谷:
         self.running = True
 
         self.ui = UI()
-        self.menu = self.ui.create_menu()
 
         self.game = Game()
 
