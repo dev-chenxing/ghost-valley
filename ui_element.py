@@ -1,12 +1,28 @@
+from typing import Callable
+
+import pygame
+
+from game import Game
+
+ui_events = ["mouse_click"]
+
+
 class UIElement:
-    def __init__(self, element_type, text, color, x, y):
+    def __init__(self, element_type, text, font, color, x, y, game: Game):
+        self.game = game
+        self.display_surface = pygame.display.get_surface()
         if element_type == "text":
-            self.text_surface = self.font.render(
+            self.surface = font.render(
                 text, False, color)
-            self.text_rect = self.text_surface.get_rect(
+            self.rect = self.surface.get_rect(
                 center=(x, y))
 
-        return self
-
     def render(self):
-        self.surface.blit(self.text_surface, self.text_rect)
+        self.display_surface.blit(self.surface, self.rect)
+
+    def register(self, event: str, callback: Callable):
+        if (event in ui_events):
+            def mouse_over_callback(button):
+                if self.rect.collidepoint(pygame.mouse.get_pos()):
+                    callback(button)
+        self.game.eventCallbacks[event].append(mouse_over_callback)

@@ -9,7 +9,9 @@ from seeds import Seeds
 class Game:
     def __init__(self) -> None:
         self.objects = []
-
+        self.eventCallbacks = {
+            "mouse_click": []
+        }
         self.player = Player(id="player", name="新鬼")
         self.field = []
 
@@ -47,6 +49,7 @@ class Game:
         return count
 
     def remove_item(self, item: Object, count=1):
+        print("remove_item", item.id, count)
         item_stack: ItemStack = next(
             i for i in self.player.inventory if i.object is item)
         item_stack.count -= count
@@ -60,6 +63,7 @@ class Game:
             return Reference(object=object)
 
     def plant(self, seed):
+        print("plant", seed.name)
         self.remove_item(item=seed, count=1)
         ref = self.create_reference(object=seed.crop)
         self.field.append(ref)

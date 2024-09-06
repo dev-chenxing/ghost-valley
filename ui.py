@@ -3,57 +3,45 @@ import pygame
 from game import Game
 from palette import palette
 from lib.zhongwen.number import 中文數字
+from ui_element import UIElement
 
 
 class UI:
-    def __init__(self):
+    def __init__(self, game: Game):
         self.viewport_width = 1280
         self.viewport_height = 720
         self.screen = pygame.display.set_mode(
             (self.viewport_width, self.viewport_height))
         self.screen.fill(palette["山矾"])
         self.font = pygame.font.Font("fonts/AlimamaDaoLiTi.ttf", 36)
-        self.surface = pygame.display.get_surface()
-        self.is_mouse_just_clicked = False
+        self.display_surface = pygame.display.get_surface()
+        self.game = game
 
     def create_label(self, text, color, x, y):
-        surface = self.font.render(
-            text, False, color)
-        rect = surface.get_rect(
-            center=(x, y))
-        self.surface.blit(surface, rect)
+        label = UIElement(element_type="text", text=text,
+                          font=self.font, color=color, x=x, y=y, game=self.game)
+        label.render()
+        return label
 
     def create_text_select(self, text, color, x, y):
-        surface = self.font.render(
-            text, False, color)
-        rect = surface.get_rect(
-            center=(x, y))
-        self.surface.blit(surface, rect)
+        text_select = UIElement(element_type="text", text=text,
+                                font=self.font, color=color, x=x, y=y, game=self.game)
+        text_select.render()
+        return text_select
 
-        mouse_position = pygame.mouse.get_pos()
-        mouse_clicked = pygame.mouse.get_pressed()[0]
-        if mouse_clicked == False:
-            self.is_mouse_just_clicked = False
-        if rect.collidepoint(mouse_position):
-            # print('mouse_over')
-            if mouse_clicked and self.is_mouse_just_clicked == False:
-                self.is_mouse_just_clicked = True
-                return True
-            if mouse_clicked:
-                print("mouse_click")
-
-    def update(self, deltaTime: float, game: Game):
-        self.create_label(text=f"铜钱{中文數字(game.player.coins)}文", color=palette["烟墨"],
+    def update(self, deltaTime: float):
+        self.create_label(text=f"铜钱{中文數字(self.game.player.coins)}文", color=palette["烟墨"],
                           x=self.viewport_width/2, y=128)
 
-        for item_stack in game.player.inventory:
+        for item_stack in self.game.player.inventory:
             if (item_stack.count > 0):
-                self.create_text_select(text=f"{item_stack.object.name}{中文數字(
+                text_select = self.create_text_select(text=f"{item_stack.object.name}{中文數字(
                     item_stack.count)}颗", color=palette["烟墨"],
                     x=self.viewport_width/2, y=256)
-                # game.plant(item_stack.object)
+                text_select.register(event="mouse_click",
+                                     callback=lambda button: self.game.plant(item_stack.object))
 
-        for plant_ref in game.field:
+        for plant_ref in self.game.field:
             self.create_text_select(text=plant_ref.object.name, color=palette["烟墨"],
                                     x=self.viewport_width/2, y=384)
 

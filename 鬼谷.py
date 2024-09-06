@@ -12,19 +12,22 @@ class 鬼谷:
         self.clock = pygame.time.Clock()
         self.running = True
 
-        self.ui = UI()
-
         self.game = Game()
+        self.ui = UI(game=self.game)
 
     def run(self):
-
         while True:
-            self.deltaTime = self.clock.tick() / 1000
+            self.deltaTime = self.clock.tick(60) / 1000
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-            self.ui.update(self.deltaTime, self.game)
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    button = pygame.mouse.get_pressed().index(True)
+                    for callback in self.game.eventCallbacks["mouse_click"]:
+                        print("callback")
+                        callback(button=button)
+            self.ui.update(self.deltaTime)
 
             pygame.display.update()
 
