@@ -22,9 +22,9 @@ class 鬼谷:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-                if event.type == pygame.MOUSEBUTTONDOWN:
+                elif event.type == pygame.MOUSEBUTTONDOWN:
                     button = pygame.mouse.get_pressed().index(True)
-                    for callback in self.game.eventCallbacks["mouse_click"]:
+                    for callback in self.game.eventCallbacks["mouse_click"].values():
                         print("callback")
                         callback(button=button)
             self.ui.update(self.deltaTime)

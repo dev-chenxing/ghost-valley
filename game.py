@@ -10,7 +10,7 @@ class Game:
     def __init__(self) -> None:
         self.objects = []
         self.eventCallbacks = {
-            "mouse_click": []
+            "mouse_click": {}
         }
         self.player = Player(id="player", name="新鬼")
         self.field = []

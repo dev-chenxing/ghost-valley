@@ -25,4 +25,6 @@ class UIElement:
             def mouse_over_callback(button):
                 if self.rect.collidepoint(pygame.mouse.get_pos()):
                     callback(button)
-        self.game.eventCallbacks[event].append(mouse_over_callback)
+            if 0 not in self.game.eventCallbacks[event]:
+                print("register")
+                self.game.eventCallbacks[event][0] = mouse_over_callback
