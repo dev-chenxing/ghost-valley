@@ -5,7 +5,8 @@ import re
 小寫位名表 = "十百千"
 組名表 = "萬億兆京垓秭穰溝澗正載"
 
-def 中文數字(
+
+def 中文数字(
     n: Union[int, float, str]
 ) -> str:
     位名表 = 小寫位名表
