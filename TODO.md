@@ -1,5 +1,3 @@
-- [x] 农历日期显示 cnlunar
-- [ ] 游戏
-- [ ] 主题颜色 palette
-- [ ] 优化标题页 welcome
-- [ ] 中文命令 时间 荷包 背筐
+- [ ] 创建玩家 character creation
+- [ ] 种种子 plant seeds
+- [ ] 收获 harvest
