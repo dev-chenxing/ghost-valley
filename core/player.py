@@ -2,13 +2,13 @@ from lib.zhongwen.number import 中文数字
 
 
 class Object():
-    def __init__(self, id, name):
+    def __init__(self, id: str, name: str):
         self.id = id
         self.name = name
 
 
 class Seeds(Object):
-    def __init__(self, id, name, value=0, crop=None):
+    def __init__(self, id: str, name: str, value=0, crop: str=None):
         Object.__init__(self, id, name)
         self.objectType = "seeds"
         self.value = value
@@ -17,13 +17,21 @@ class Seeds(Object):
 
 
 class ItemStack():
-    def __init__(self, object, count=1):
+    def __init__(self, object: Object, count=1):
         self.object = object
         self.count = count
 
     def to_string(self):
         return f"{中文数字(self.count)}{self.object.unit}{self.object.name}"
 
+
+
+class Reference():
+    def __init__(self, object: Object):
+        self.object = object
+
+    def delete(self):
+        del self
 
 white_radish_seed = Seeds(id="white_radish_seed",
                           name="白萝卜种子", crop="white_radish")
@@ -32,8 +40,8 @@ carrot_seed = Seeds(id="carrot_seed",
 
 
 class Player:
-    def __init__(self) -> None:
-        self.name = "新鬼"
+    def __init__(self, name="新鬼") -> None:
+        self.name = name
         self.coins = 10
         self.inventory = [ItemStack(object=white_radish_seed, count=1), ItemStack(
             object=carrot_seed, count=1)]

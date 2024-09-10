@@ -1,3 +1,5 @@
-- [ ] 创建玩家 character creation
+- [x] 创建玩家 character creation
+- [ ] default color for prompt default value
 - [ ] 种种子 plant seeds
 - [ ] 收获 harvest
+- [ ] 对话 wrapper for print, colored text for characters, add newline
