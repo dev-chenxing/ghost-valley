@@ -7,8 +7,11 @@ import re
 
 
 def 中文数字(
-    n: Union[int, float, str]
+    n: Union[int, float, str], 两: bool = False
 ) -> str:
+    if 两 and n == 2:
+        return "两"
+
     位名表 = 小寫位名表
     數字表 = 小寫數字表
     數字表 = 數字表

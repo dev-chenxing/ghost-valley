@@ -1,5 +1,6 @@
 - [x] 创建玩家 character creation
 - [x] say should not use keyboard.read_key but a hide input method
-- [ ] 种种子 plant seeds
+- [x] 种种子 plant seeds
+- [ ] get_gender
 - [ ] 收获 harvest
 - [ ] 对话 wrapper for print, colored text for characters, add newline

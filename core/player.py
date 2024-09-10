@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Optional, Union
 import game
 from lib.zhongwen.number import 中文数字
 
@@ -76,7 +76,7 @@ class Player:
     def __init__(self, name="新鬼") -> None:
         self.name = name
         self.coins = 10
-        self.inventory = [ItemStack(object=white_radish_seeds, count=1), ItemStack(
+        self.inventory = [ItemStack(object=white_radish_seeds, count=2), ItemStack(
             object=carrot_seeds, count=1)]
 
 
@@ -123,3 +123,12 @@ def get_object(id):
         return next(obj for obj in objects if obj.id is id)
     except:
         return None
+
+
+def get_item_count(item: Object):
+    generator = (i for i in game.player.inventory if i.object is item)
+    try:
+        item_stack: ItemStack = next(generator)
+        return item_stack.count
+    except StopIteration:
+        return 0
