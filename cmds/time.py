@@ -78,3 +78,4 @@ def game_time_description() -> str:
 def main():
     print(f"现在 游戏 时间是：[bright_yellow]{
         game_time_description()}[/bright_yellow]")
+

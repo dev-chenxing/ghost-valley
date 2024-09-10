@@ -1,0 +1,3 @@
+- [ ] 创建玩家 character creation
+- [ ] 种种子 plant seeds
+- [ ] 收获 harvest

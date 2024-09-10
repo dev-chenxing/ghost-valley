@@ -1,4 +1,6 @@
 import time
+import datetime
+import cnlunar
 from lib.zhongwen.number import 中文数字
 
 game_time = None
@@ -10,25 +12,21 @@ class Time:
         self.time = init_time
 
     def format(self):
-        def get_season(month: int) -> str:
+        def get_month(month: int) -> str:
             match month:
-                case m if 1 <= m <= 3:
-                    return "春"
-                case m if 4 <= m <= 6:
-                    return "夏"
-                case m if 7 <= m <= 9:
-                    return "秋"
-                case m if 10 <= m <= 12:
-                    return "冬"
+                case 1:
+                    return "正月"
+                case 12:
+                    return "腊月"
                 case _:
-                    return
+                    return f"{中文数字(month)}月"
 
-        def get_mday(mday: int) -> str:
-            match mday:
+        def get_day(day: int) -> str:
+            match day:
                 case d if 1 <= d <= 9:
-                    return f"初{中文数字(mday)}"
+                    return f"初{中文数字(day)}"
                 case m if 10 <= m <= 30:
-                    return f"{中文数字(mday)}日"
+                    return f"{中文数字(day)}日"
                 case _:
                     return
 
@@ -62,23 +60,26 @@ class Time:
                     return "深夜子时"
                 case _:
                     return
-        tm = time.gmtime(self.time)
-        t = time.struct_time((tm.tm_year - 1969, tm.tm_mon, tm.tm_mday, tm.tm_hour,
-                              tm.tm_min, tm.tm_sec, tm.tm_wday, tm.tm_yday, tm.tm_isdst))
+        t = datetime.datetime.fromtimestamp(
+            self.time, tz=datetime.timezone.utc)
+        lunar_t = cnlunar.Lunar(datetime.datetime(
+            t.year, t.month+1, t.day+5, t.hour, t.minute))
+
         era_name = "阎罗王"
-        year = 中文数字(t.tm_year) if t.tm_year != 1 else "元"
-        season = get_season(t.tm_mon)
-        month = 中文数字(t.tm_mon) if t.tm_mon != 1 else "正"
-        mday = get_mday(t.tm_mday)
-        hour_period = get_hour_period(t.tm_hour)
-        return f"{era_name}{year}年{season}{month}月{mday}，{hour_period}"
+        lunar_year = lunar_t.lunarYear - 1969
+        year = 中文数字(lunar_year) if lunar_year != 1 else "元"
+        season = lunar_t.lunarSeason
+        month = get_month(lunar_t.lunarMonth)
+        day = get_day(lunar_t.lunarDay)
+        hour_period = get_hour_period(t.hour)
+        return f"{era_name}{year}年{season}{month}{day}，{hour_period}"
 
 
 def game_time_thread():
     timescale = 360
     while True:
-        time.sleep(1/timescale)
-        game_time.time += 1
+        time.sleep(1)
+        game_time.time += timescale
 
 
 def real_time_thread():
