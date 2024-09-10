@@ -1,5 +1,5 @@
 - [x] 创建玩家 character creation
-- [ ] default color for prompt default value
+- [ ] say should not use input but a wait for keydown method
 - [ ] 种种子 plant seeds
 - [ ] 收获 harvest
 - [ ] 对话 wrapper for print, colored text for characters, add newline
