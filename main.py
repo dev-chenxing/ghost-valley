@@ -3,10 +3,11 @@ from rich import print
 
 
 from lib.zhongwen.number import 中文数字
-from core import timer
-from core.prompt import say, prompt
 import game
-from core.player import Object, Player, get_item_color, get_item_count, get_object, plant, set_attributes
+from core.object import Object
+from core.player import Player
+from core.prompt import prompt, say
+from core import timer
 from help.title import title
 
 
@@ -44,8 +45,23 @@ try:
                                 "男", "女"], same_line=True, bold=True) == "女"
     say(who=game.player.name, text=f"小的叫{game.player.name}")
 
+    white_radish = game.create_object(objectType="crop", id="white_radish")
+    white_radish.name = "白萝卜"
+    white_radish_seeds = game.create_object(
+        objectType="seeds", id="white_radish_seeds")
+    white_radish_seeds.name = "白萝卜种子"
+    white_radish_seeds.crop = "white_radish"
+    carrot = game.create_object(objectType="crop", id="carrot")
+    carrot.name = "胡萝卜"
+    carrot_seeds = game.create_object(objectType="seeds", id="carrot_seed")
+    carrot_seeds.name = "胡萝卜种子"
+    carrot_seeds.crop = "carrot"
+    game.add_item(item=white_radish_seeds, count=2)
+    game.add_item(item=carrot_seeds)
+
     game_time_thread.start()
     real_time_thread.start()
+
     while running:
         cmd = input("> ")
         if cmd == "时间":
@@ -57,14 +73,14 @@ try:
         elif cmd == "背篓":
             item_stack_strings = []
             for item_stack in game.player.inventory:
-                color = get_item_color(item_stack.object)
+                color = item_stack.object.color
                 item_stack_strings.append(
                     f"[{color}]{item_stack.to_string()}[/{color}]")
             print(f"背篓里放了{"，".join(item_stack_strings)}")
         elif cmd == "种下全部白萝卜种子":
-            item = get_object("white_radish_seeds")
-            for _ in range(get_item_count(item)):
-                plant(seeds=item)
+            item = game.get_object("white_radish_seeds")
+            for _ in range(game.get_item_count(item)):
+                game.plant(seeds=item)
         elif cmd == "田":
             if not game.field:
                 print("田里还荒着，没种东西")
@@ -77,7 +93,7 @@ try:
                     else:
                         plants[ref.object] += 1
                 for plant, count in plants.items():
-                    color = get_item_color(plant)
+                    color = plant.color
                     plant_strings.append(
                         f"[{color}]{中文数字(count, 两=True)}{plant.unit}{plant.name}[/{color}]")
                 print(f"田里种着{"，".join(plant_strings)}")

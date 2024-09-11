@@ -1,7 +1,5 @@
-- [x] 创建玩家 character creation
-- [x] say should not use keyboard.read_key but a hide input method
-- [x] 种种子 plant seeds
 - [x] get_gender
+- [ ] feedback text for plant
 - [ ] 收获 harvest
 - [ ] get character text color
 - [ ] 下山剧情
