@@ -1,6 +1,7 @@
 from typing import Union
 import game
 from lib.zhongwen.number import 中文数字
+from core import timer
 
 objects = []
 
@@ -80,7 +81,7 @@ class Player:
         self.inventory = [ItemStack(object=white_radish_seeds, count=2), ItemStack(
             object=carrot_seeds, count=1)]
         self.title = "鬼众"
-        self.birthday = None
+        self.potential = 99 # 资质平平
 
 
 item_colors = {

@@ -62,8 +62,9 @@ class Time:
                     return
         t = datetime.datetime.fromtimestamp(
             self.time, tz=datetime.timezone.utc)
-        lunar_t = cnlunar.Lunar(datetime.datetime(
-            t.year, t.month+1, t.day+5, t.hour, t.minute))
+        t_offset = datetime.datetime(
+            t.year, t.month+1, t.day+5, t.hour, t.minute)
+        lunar_t = cnlunar.Lunar(t_offset)
 
         era_name = "阎罗王"
         lunar_year = lunar_t.lunarYear - 1969
