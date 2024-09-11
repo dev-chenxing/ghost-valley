@@ -1,7 +1,6 @@
-from typing import Optional, Union
+from typing import Union
 import game
 from lib.zhongwen.number import 中文数字
-
 
 objects = []
 
@@ -75,9 +74,13 @@ carrot_seeds.crop = "carrot"
 class Player:
     def __init__(self, name="新鬼") -> None:
         self.name = name
+        self.female = True
+        self.attributes = [19, 26, 0, 2, 30, 18]
         self.coins = 10
         self.inventory = [ItemStack(object=white_radish_seeds, count=2), ItemStack(
             object=carrot_seeds, count=1)]
+        self.title = "鬼众"
+        self.birthday = None
 
 
 item_colors = {
@@ -132,3 +135,7 @@ def get_item_count(item: Object):
         return item_stack.count
     except StopIteration:
         return 0
+
+
+def set_attributes():
+    return [18, 30, 17, 4, 10, 22]

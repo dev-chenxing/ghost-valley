@@ -7,13 +7,24 @@ from rich.console import Console
 console = Console()
 
 
-def prompt(text: str, default: str = None, suffix: str = "：", choices: list[str] = None, invalid_text: str = "...", same_line: bool = False):
+def prompt(text: str, default: str = None, suffix: str = "：", show_choices: bool = False, choices: list[str] = None, invalid_text: str = "...", same_line: bool = False, bold: bool = False):
     prefix = "> "
+    choices_text = f" [{
+        "/".join(choices)}]" if show_choices and choices else ""
     default_text = f" [{default}]" if default else ""
+    text = f"[bold grey85]{text}[/bold grey85]" if bold else text
     if same_line:
-        result = console.input(f"{prefix}{text}{default_text}{
-                               suffix}") or default
-        return result
+        if choices:
+            while True:
+                result = console.input(f"{prefix}{text}{choices_text}{default_text}{
+                    suffix}") or default
+                if result in choices:
+                    return result
+                else:
+                    print(invalid_text)
+        else:
+            return console.input(f"{prefix}{text}{choices_text}{default_text}{
+                suffix}") or default
     else:
         print(f"{text}")
         while True:
