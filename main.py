@@ -2,11 +2,10 @@ import threading
 from rich import print
 
 
+from command import process_input
 from lib.zhongwen.number import 中文数字
 import game
-from core.object import Object
 from core.player import Player
-from core.prompt import prompt, say
 from core import timer
 from help.title import title
 
@@ -25,6 +24,7 @@ try:
     real_time_thread = threading.Thread(
         target=timer.real_time_thread, daemon=True)
 
+    farm = game.create_room(id="farm")
     game.player = Player()
     # say(text="你再次醒来时，环顾四周，虽然此刻天色漆黑，借着月光不难看出自己身处一片幽林中的小径旁。")
     # say(text="这个没有指示牌的[wheat1]鬼地方[/wheat1]。")
@@ -59,47 +59,14 @@ try:
     game.add_item(item=white_radish_seed, count=15)
     game.add_item(item=carrot_seed)
 
+    game.save_game()
+
     game_time_thread.start()
     real_time_thread.start()
 
     while running:
         cmd = input("> ")
-        if cmd == "时间":
-            print(f"现在 游戏 时间是：[bright_yellow]{
-                timer.game_time.format()}[/bright_yellow]")
-        elif cmd == "荷包":
-            print(f"{game.player.name}摸了摸自己荷包里的[light_goldenrod1]{
-                  中文数字(game.player.coins)}文钱[/light_goldenrod1]")
-        elif cmd == "背篓":
-            item_stack_strings: list[str] = []
-            for item_stack in game.player.inventory:
-                color = item_stack.object.color
-                item_stack_strings.append(
-                    f"[{color}]{item_stack.to_string()}[/{color}]")
-            print(f"背篓里放了{"，".join(item_stack_strings)}")
-        elif cmd == "种白萝卜种子":
-            item = game.get_object("white_radish_seed")
-            game.plant(seed=item)
-        elif cmd == "种下全部白萝卜种子":
-            item = game.get_object("white_radish_seed")
-            for _ in range(game.get_item_count(item)):
-                game.plant(seed=item)
-        elif cmd == "田":
-            if not game.field:
-                print("田里还荒着，没种东西")
-            else:
-                plant_strings = []
-                plants: dict[Object, int] = {}
-                for ref in game.field:
-                    if ref.object not in plants:
-                        plants[ref.object] = 1
-                    else:
-                        plants[ref.object] += 1
-                for plant, count in plants.items():
-                    color = plant.color
-                    plant_strings.append(
-                        f"[{color}]{中文数字(count, 两=True)}{plant.unit}{plant.name}[/{color}]")
-                print(f"田里种着{"，".join(plant_strings)}")
+        process_input(cmd)
 
 except (KeyboardInterrupt, SystemExit):
     print(":x: 退出")

@@ -1,6 +1,9 @@
 - [x] get_gender
+- [ ] process_input
 - [ ] feedback text for plant
+- [ ] refactor prompt
 - [ ] 收获 harvest
+- [ ] save time
 - [ ] get character text color
 - [ ] 下山剧情
 - [ ] 天灵根

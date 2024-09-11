@@ -9,3 +9,9 @@ class ItemStack():
 
     def to_string(self):
         return f"{中文数字(self.count)}{self.object.unit}{self.object.name}"
+
+    def to_json(self):
+        return {
+            "object": self.object.id,
+            "count": self.count
+        }

@@ -1,12 +1,14 @@
+import json
 from typing import Union
 from core.item_stack import ItemStack
 from core.object import Crop, Object, Seed
 from core.player import Player
 from core.reference import Reference
+from core.room import Room
 
 objects: list[Object] = []
 player: Player = None
-field: list[Reference] = []
+rooms: list[Room] = []
 
 
 def get_item_count(item: Object):
@@ -33,17 +35,17 @@ def remove_item(item: Object, count=1):
         player.inventory.remove(item_stack)
 
 
-def create_reference(object: Union[Object, str]):
+def create_reference(object: Union[Object, str], room: Room):
     if type(object) is str:
-        return Reference(object=get_object(object))
+        return Reference(object=get_object(object), room=room)
     else:
-        return Reference(object=object)
+        return Reference(object=object, room=room)
 
 
-def plant(seed: Seed):
+def plant(seed: Seed, room: Room):
     remove_item(item=seed, count=1)
-    ref = create_reference(object=seed.crop)
-    field.append(ref)
+    ref = create_reference(object=seed.crop, room=room)
+    room.plants.append(ref)
 
 
 def create_object(objectType: str, id: str):
@@ -64,3 +66,31 @@ def add_item(item: Union[Object, str], count: int = 1):
         object = get_object(id=item)
     if object:
         player.inventory.append(ItemStack(object=object, count=count))
+
+
+def get_inventory_json(inventory: list[ItemStack]):
+    return list(map(lambda item_stack: item_stack.to_json(), inventory))
+
+
+def get_rooms_json():
+    return list(map(lambda room: room.to_json(), rooms))
+
+
+def save_game(file: str = "quicksave"):
+    data = {"player": {"coins": player.coins,
+                       "inventory": get_inventory_json(player.inventory)},
+            "rooms": get_rooms_json()}
+    with open(f'saves/{file}.json', "w") as save_file:
+        json.dump(data, save_file)
+
+
+def create_room(id: str):
+    room = Room(id=id)
+    rooms.append(room)
+
+
+def get_room(id: str):
+    try:
+        return next(room for room in rooms if room.id is id)
+    except:
+        return None
