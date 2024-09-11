@@ -1,6 +1,6 @@
 from typing import Union
 from core.item_stack import ItemStack
-from core.object import Crop, Object, Seeds
+from core.object import Crop, Object, Seed
 from core.player import Player
 from core.reference import Reference
 
@@ -40,16 +40,16 @@ def create_reference(object: Union[Object, str]):
         return Reference(object=object)
 
 
-def plant(seeds: Seeds):
-    remove_item(item=seeds, count=1)
-    ref = create_reference(object=seeds.crop)
+def plant(seed: Seed):
+    remove_item(item=seed, count=1)
+    ref = create_reference(object=seed.crop)
     field.append(ref)
 
 
 def create_object(objectType: str, id: str):
     object: Object = None
-    if objectType == "seeds":
-        object = Seeds(id=id)
+    if objectType == "seed":
+        object = Seed(id=id)
     elif objectType == "crop":
         object = Crop(id=id)
     if object:

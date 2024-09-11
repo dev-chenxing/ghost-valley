@@ -38,26 +38,26 @@ try:
     #     say(text="眼看着女鬼离自己越来越近，正当以为自己小命不保时————")
     #     say(who="女鬼", action="问道", text="小鬼，你唤做甚么？")
     #     say(text="没有想象中的鬼哭狼嚎，女鬼声音轻柔舒缓，且这话问得突然，你一愣，半天没有反应过来。")
-    print("[bold wheat1]创建角色[/bold wheat1]")
-    game.player.name = prompt(
-        "请输入你的自称", default=f"[wheat1]{game.player.name}[/wheat1]", same_line=True, bold=True)
-    game.player.female = prompt("请选择你的性别", show_choices=True, choices=[
-                                "男", "女"], same_line=True, bold=True) == "女"
-    say(who=game.player.name, text=f"小的叫{game.player.name}")
+    # print("[bold wheat1]创建角色[/bold wheat1]")
+    # game.player.name = prompt(
+    #     "请输入你的自称", default=f"[wheat1]{game.player.name}[/wheat1]", same_line=True, bold=True)
+    # game.player.female = prompt("请选择你的性别", show_choices=True, choices=[
+    #                             "男", "女"], same_line=True, bold=True) == "女"
+    # say(who=game.player.name, text=f"小的叫{game.player.name}")
 
     white_radish = game.create_object(objectType="crop", id="white_radish")
     white_radish.name = "白萝卜"
-    white_radish_seeds = game.create_object(
-        objectType="seeds", id="white_radish_seeds")
-    white_radish_seeds.name = "白萝卜种子"
-    white_radish_seeds.crop = "white_radish"
+    white_radish_seed = game.create_object(
+        objectType="seed", id="white_radish_seed")
+    white_radish_seed.name = "白萝卜种子"
+    white_radish_seed.crop = "white_radish"
     carrot = game.create_object(objectType="crop", id="carrot")
     carrot.name = "胡萝卜"
-    carrot_seeds = game.create_object(objectType="seeds", id="carrot_seed")
-    carrot_seeds.name = "胡萝卜种子"
-    carrot_seeds.crop = "carrot"
-    game.add_item(item=white_radish_seeds, count=2)
-    game.add_item(item=carrot_seeds)
+    carrot_seed = game.create_object(objectType="seed", id="carrot_seed")
+    carrot_seed.name = "胡萝卜种子"
+    carrot_seed.crop = "carrot"
+    game.add_item(item=white_radish_seed, count=15)
+    game.add_item(item=carrot_seed)
 
     game_time_thread.start()
     real_time_thread.start()
@@ -71,16 +71,19 @@ try:
             print(f"{game.player.name}摸了摸自己荷包里的[light_goldenrod1]{
                   中文数字(game.player.coins)}文钱[/light_goldenrod1]")
         elif cmd == "背篓":
-            item_stack_strings = []
+            item_stack_strings: list[str] = []
             for item_stack in game.player.inventory:
                 color = item_stack.object.color
                 item_stack_strings.append(
                     f"[{color}]{item_stack.to_string()}[/{color}]")
             print(f"背篓里放了{"，".join(item_stack_strings)}")
+        elif cmd == "种白萝卜种子":
+            item = game.get_object("white_radish_seed")
+            game.plant(seed=item)
         elif cmd == "种下全部白萝卜种子":
-            item = game.get_object("white_radish_seeds")
+            item = game.get_object("white_radish_seed")
             for _ in range(game.get_item_count(item)):
-                game.plant(seeds=item)
+                game.plant(seed=item)
         elif cmd == "田":
             if not game.field:
                 print("田里还荒着，没种东西")
