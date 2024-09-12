@@ -2,7 +2,7 @@ from rich import print
 import game
 
 
-def callback(args: list[str]):
+def callback(args: list[str] = None):
     item_stack_strings: list[str] = []
     for item_stack in game.player.inventory:
         color = item_stack.object.color

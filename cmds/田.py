@@ -4,7 +4,7 @@ from lib.zhongwen.number import 中文数字
 from rich import print
 
 
-def callback(args: list[str]):
+def callback(args: list[str] = None):
     if not game.get_room(id="farm").plants:
         print("田里还荒着，没种东西")
     else:
