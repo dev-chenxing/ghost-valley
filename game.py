@@ -20,16 +20,19 @@ def get_item_count(item: Object):
         return 0
 
 
-def get_object(id):
+def get_object(id: str = None, name: str = None):
     try:
-        return next(obj for obj in objects if obj.id is id)
+        if id:
+            return next(obj for obj in objects if obj.id == id)
+        elif name:
+            return next(obj for obj in objects if obj.name == name)
     except:
         return None
 
 
 def remove_item(item: Object, count=1):
     item_stack: ItemStack = next(
-        i for i in player.inventory if i.object is item)
+        i for i in player.inventory if i.object == item)
     item_stack.count -= count
     if item_stack.count == 0:
         player.inventory.remove(item_stack)
