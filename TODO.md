@@ -1,6 +1,3 @@
-- [x] get_gender
-- [x] process_input
-- [x] feedback text for plant
 - [ ] feedback text for save
 - [ ] refactor prompt
 - [ ] 收获 harvest
