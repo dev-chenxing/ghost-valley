@@ -2,18 +2,24 @@ from core.object import Object
 from core.room import Room
 
 
-def get_reference_index(room: Room, object: Object):
-    index = 0
-    return str(index).zfill(6)
-
-
 class Reference():
     def __init__(self, object: Object, room: Room):
-        index = get_reference_index(room=room, object=object)
-        self.id = f"{object.id}{index}"
+        self.room = room
         self.object = object
+        if self.object.objectType == "crop":
+            self.reference_list = self.room.plants
+        self.index = self.get_index()
+        self.id = f"{object.id}{str(self.index).zfill(6)}"
+
+    def get_index(self) -> str:
+        index = 0
+        for ref in self.reference_list:
+            if ref.object == self.object:
+                index = ref.index + 1
+        return index
 
     def delete(self):
+        self.reference_list.remove(self)
         del self
 
     def to_json(self):

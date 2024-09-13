@@ -6,6 +6,7 @@ class Object():
         self.name = name
         self.color: str = None
         self.unit: str = ""
+        self.objectType: str = "crop"
 
 class Seed(Object):
     def __init__(self, id: str, name: str = "", value=0, crop: str = None):
