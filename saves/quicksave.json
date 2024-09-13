@@ -1,1 +1,1 @@
-{"player": {"coins": 10, "inventory": [{"object": "white_radish_seed", "count": 15}, {"object": "carrot_seed", "count": 1}]}, "rooms": [{"id": "farm", "plants": []}]}
+{"player": {"coins": 10, "inventory": [{"object": "white_radish_seed", "count": 15}, {"object": "carrot_seed", "count": 1}]}, "rooms": [{"id": "farm", "plants": []}], "game_timr": 7920, "real_timr": 22}

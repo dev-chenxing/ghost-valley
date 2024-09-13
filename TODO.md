@@ -1,6 +1,3 @@
-- [ ] get_reference_index
-- [ ] 收获 harvest
-- [ ] save time
 - [ ] get character text color
 - [ ] 下山剧情
 - [ ] 天灵根

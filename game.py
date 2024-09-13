@@ -1,5 +1,6 @@
 import json
 from typing import Union
+from core import timer
 from core.item_stack import ItemStack
 from core.object import Crop, Object, Seed
 from core.player import Player
@@ -85,9 +86,13 @@ def get_rooms_json():
 
 
 def save_game(file: str = "quicksave"):
-    data = {"player": {"coins": player.coins,
-                       "inventory": get_inventory_json(player.inventory)},
-            "rooms": get_rooms_json()}
+    data = {
+        "player": {"coins": player.coins,
+                   "inventory": get_inventory_json(player.inventory)},
+        "rooms": get_rooms_json(),
+        "game_time": timer.game_time.time,
+        "real_time": timer.real_time.time
+    }
     with open(f'saves/{file}.json', "w") as save_file:
         json.dump(data, save_file)
 

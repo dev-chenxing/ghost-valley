@@ -3,8 +3,8 @@ import datetime
 import cnlunar
 from lib.zhongwen.number import 中文数字
 
-game_time = None
-real_time = None
+game_time: int = None
+real_time: int = None
 
 
 class Time:
