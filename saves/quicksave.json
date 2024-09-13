@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-{"player": {"coins": 10, "inventory": [{"object": "white_radish_seed", "count": 15}, {"object": "carrot_seed", "count": 1}]}, "rooms": [{"id": "farm", "plants": []}], "game_timr": 7920, "real_timr": 22}
-=======
-{"player": {"coins": 10, "inventory": [{"object": "white_radish_seed", "count": 15}, {"object": "carrot_seed", "count": 1}]}, "rooms": [{"id": "farm", "plants": []}]}
->>>>>>> 2a1043c6c0fb076e3a60a3aded51c98607083972
+{"player": {"coins": 10, "inventory": [{"object": "white_radish_seed", "count": 15}, {"object": "carrot_seed", "count": 1}]}, "rooms": [{"id": "farm", "plants": []}], "game_time": 0, "real_time": 0}
