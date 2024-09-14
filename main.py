@@ -5,6 +5,7 @@ import game
 from core.player import Player
 from core import timer
 from content.title import title
+from content.character_creation import character_creation
 
 print(title)
 
@@ -18,7 +19,7 @@ try:
 
     farm = game.create_room(id="farm")
     game.player = Player()
-    # character_creation()
+    character_creation()
 
     white_radish = game.create_object(
         objectType="crop", id="white_radish", name="白萝卜")
