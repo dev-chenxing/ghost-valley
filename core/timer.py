@@ -1,7 +1,7 @@
 import time
 import datetime
 import cnlunar
-from lib.zhongwen.number import 中文数字
+from lib.chinese_number import 中文数字
 
 game_time: int = None
 real_time: int = None

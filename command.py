@@ -5,15 +5,15 @@ import importlib
 
 commands: list[dict] = []
 
-cmds_dir = "cmds"
-for dir_entry in os.scandir(cmds_dir):
+cmd_dir = "commands"
+for dir_entry in os.scandir(cmd_dir):
     if dir_entry.is_file():
         path = Path(dir_entry.name)
         if path.suffix == ".py":
             stem = path.stem
             commands.append({
                 "name": stem,
-                "callback": importlib.import_module(f"{cmds_dir}.{stem}").callback
+                "callback": importlib.import_module(f"{cmd_dir}.{stem}").callback
             })
 
 

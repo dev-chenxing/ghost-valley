@@ -1,5 +1,5 @@
 import game
-from lib.zhongwen.number import 中文数字
+from lib.chinese_number import 中文数字
 from rich import print
 
 

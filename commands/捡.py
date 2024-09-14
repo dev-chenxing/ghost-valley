@@ -1,6 +1,6 @@
 from rich import print
 import game
-from lib.zhongwen.number import 中文数字
+from lib.chinese_number import 中文数字
 
 
 def callback(args: list[str]):
