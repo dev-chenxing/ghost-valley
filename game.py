@@ -2,7 +2,7 @@ import json
 from typing import Union
 from core import timer
 from core.item_stack import ItemStack
-from core.object import Crop, Object, Seed
+from core.object import Crop, Object, Resource, Seed
 from core.player import Player
 from core.reference import Reference
 from core.room import Room
@@ -57,12 +57,14 @@ def harvest(plant: Reference):
     player.coins += 100
 
 
-def create_object(objectType: str, id: str):
+def create_object(objectType: str, id: str, **kwargs):
     object: Object = None
     if objectType == "seed":
-        object = Seed(id=id)
+        object = Seed(id=id, **kwargs)
     elif objectType == "crop":
-        object = Crop(id=id)
+        object = Crop(id=id, **kwargs)
+    elif objectType == "resource":
+        object = Resource(id=id, **kwargs)
     if object:
         objects.append(object)
         return object

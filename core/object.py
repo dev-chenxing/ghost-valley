@@ -1,26 +1,35 @@
 
 
 class Object():
-    def __init__(self, id: str, name: str = ""):
+    def __init__(self, id: str, **kwargs):
         self.id = id
-        self.name = name
+        self.name = kwargs["name"] if "name" in kwargs else ""
         self.color: str = None
-        self.unit: str = ""
+        self.unit: str = kwargs["unit"] if "unit" in kwargs else ""
         self.objectType: str = "crop"
 
+
 class Seed(Object):
-    def __init__(self, id: str, name: str = "", value=0, crop: str = None):
-        Object.__init__(self, id, name)
+    def __init__(self, id: str, **kwargs):
+        Object.__init__(self, id, **kwargs)
         self.objectType: str = "seed"
         self.color: str = "dark_olive_green3"
-        self.value: int = value
-        self.crop: str = crop
+        self.value: int = 0
+        self.crop: str = kwargs["crop"] if "crop" in kwargs else None
         self.unit: str = "颗"
 
 
+class Resource(Object):
+    def __init__(self, id: str, **kwargs):
+        Object.__init__(self, id, **kwargs)
+        self.objectType: str = "resource"
+        self.color: str = "wheat4"
+        self.value: int = 0
+
+
 class Crop(Object):
-    def __init__(self, id):
-        Object.__init__(self, id)
+    def __init__(self, id, **kwargs):
+        Object.__init__(self, id, **kwargs)
         self.objectType: str = "crop"
         self.value: int = 0
         self.unit: str = "个"

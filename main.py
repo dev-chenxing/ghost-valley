@@ -1,24 +1,16 @@
 import threading
 from rich import print
-
-
 from command import process_input
-from lib.zhongwen.number import 中文数字
 import game
 from core.player import Player
 from core import timer
 from help.title import title
 
-
 print(title)
 
-timer.game_time = timer.Time()
-timer.real_time = timer.Time()
-
 try:
-
-    running = True
-
+    timer.game_time = timer.Time()
+    timer.real_time = timer.Time()
     game_time_thread = threading.Thread(
         target=timer.game_time_thread, daemon=True)
     real_time_thread = threading.Thread(
@@ -45,17 +37,15 @@ try:
     #                             "男", "女"], same_line=True, bold=True) == "女"
     # say(who=game.player.name, text=f"小的叫{game.player.name}")
 
-    white_radish = game.create_object(objectType="crop", id="white_radish")
-    white_radish.name = "白萝卜"
+    white_radish = game.create_object(
+        objectType="crop", id="white_radish", name="白萝卜")
     white_radish_seed = game.create_object(
-        objectType="seed", id="white_radish_seed")
-    white_radish_seed.name = "白萝卜种子"
-    white_radish_seed.crop = "white_radish"
-    carrot = game.create_object(objectType="crop", id="carrot")
-    carrot.name = "胡萝卜"
-    carrot_seed = game.create_object(objectType="seed", id="carrot_seed")
-    carrot_seed.name = "胡萝卜种子"
-    carrot_seed.crop = "carrot"
+        objectType="seed", id="white_radish_seed", name="白萝卜种子", crop="white_radish")
+    carrot = game.create_object(objectType="crop", id="carrot", name="胡萝卜")
+    carrot_seed = game.create_object(
+        objectType="seed", id="carrot_seed", name="胡萝卜种子", crop="carrot")
+    twig = game.create_object(objectType="resource",
+                              id="twig", name="树枝", unit="根")
     game.add_item(item=white_radish_seed, count=15)
     game.add_item(item=carrot_seed)
 
@@ -64,7 +54,7 @@ try:
     game_time_thread.start()
     real_time_thread.start()
 
-    while running:
+    while True:
         cmd = input("> ")
         process_input(cmd)
 
