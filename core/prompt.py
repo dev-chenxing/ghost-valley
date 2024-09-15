@@ -1,6 +1,4 @@
-import time
 import click
-import keyboard
 from rich import print
 from rich.console import Console
 

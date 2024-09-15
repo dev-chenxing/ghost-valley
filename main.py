@@ -4,12 +4,20 @@ from command import process_input
 import game
 from core.player import Player
 from core import timer
-from content.title import title
+
 from content.character_creation import character_creation
 
+from content.title import title
 print(title)
 
+
+def main_menu():
+    pass
+
+
 try:
+    main_menu()
+
     timer.game_time = timer.Time()
     timer.real_time = timer.Time()
     game_time_thread = threading.Thread(
