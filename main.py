@@ -1,6 +1,7 @@
 import threading
 from rich import print
-from InquirerPy import inquirer
+from InquirerPy import inquirer, get_style
+from InquirerPy.utils import color_print
 from InquirerPy.base.control import Choice
 
 from command import process_input
@@ -10,25 +11,33 @@ from core import timer
 
 from content.character_creation import character_creation
 
-from content.title import title
-print(title)
+# from content.title import title
+# print(title)
 
 
 def main_menu():
+    color_print([("#AFD75F", "+----------------------+\n"),
+                 ("#FFD383", "|                      |\n|"),
+                 ("#AFD75F", "  星  露  谷  物  语  "),
+                 ("#FFD383", "|\n|                      |\n"),
+                 ("#AFD75F", "+----------------------+")])
     action = inquirer.select(
         message="",
         choices=[
-            "新游戏",
-            "载入",
+            Choice(value="new", name="新游戏"),
+            Choice(value="load", name="载入"),
             Choice(value=None, name="离开"),
         ],
-        default=None,
+        default="new",
         qmark="",
         amark="",
+        pointer="🌱",
         show_cursor=False,
-        transformer=lambda _: ""
+        transformer=lambda _: "",
+        style=get_style({"pointer": "#AFD75F"})
     ).execute()
-
+    if not action:
+        exit()
 
 
 try:
