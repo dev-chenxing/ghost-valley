@@ -1,5 +1,8 @@
 import threading
 from rich import print
+from InquirerPy import inquirer
+from InquirerPy.base.control import Choice
+
 from command import process_input
 import game
 from core.player import Player
@@ -12,7 +15,20 @@ print(title)
 
 
 def main_menu():
-    pass
+    action = inquirer.select(
+        message="",
+        choices=[
+            "新游戏",
+            "载入",
+            Choice(value=None, name="离开"),
+        ],
+        default=None,
+        qmark="",
+        amark="",
+        show_cursor=False,
+        transformer=lambda _: ""
+    ).execute()
+
 
 
 try:
@@ -27,7 +43,7 @@ try:
 
     farm = game.create_room(id="farm")
     game.player = Player()
-    character_creation()
+    # character_creation()
 
     white_radish = game.create_object(
         objectType="crop", id="white_radish", name="白萝卜")
