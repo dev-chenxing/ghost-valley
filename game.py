@@ -117,11 +117,12 @@ def get_room(id: str):
 
 
 def character_creation():
+    print("[bold]主角设定[/bold]")
     genders = [{"name": "男", "value": False}, {"name": "女", "value": True}]
-    # player.female = select(message="请选择你的性别", choices=genders)
-    # player.name = prompt(
-    #     "请输入你的名称", same_line=True, bold=True)
-    # farm.name = prompt("请输入农场的名称", same_line=True, bold=True)
+    player.female = select(message="性别", choices=genders)
+    player.surname = prompt("姓", same_line=True, bold=True)
+    player.given_name = prompt("名", same_line=True, bold=True)
+    player.name = f"{player.surname}{player.given_name}"
     # player.favourite_thing = prompt("请输入你最喜欢的东西", same_line=True, bold=True)
     # pet = select(message="喜好的动物", choices=[
     #              {"name": "🐈 猫", "value": "cat"}, {"name": "🐕 狗", "value": "dog"}])
@@ -133,6 +134,7 @@ def new_game():
     global farm, player
     farm = create_room(id="farm")
     player = Player()
-    skip_intro = character_creation()
-    if not skip_intro:
+    # skip_intro = character_creation()
+    # if not skip_intro:
+    if True:
         intro.cutscene()

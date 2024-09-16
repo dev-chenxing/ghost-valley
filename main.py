@@ -15,22 +15,22 @@ def load_game():
 
 
 def main_menu():
-    color_print([("#AFD75F", "+----------------------+\n"),
-                 ("#FFD383", "|                      |\n|"),
-                 ("#AFD75F", "  星  露  谷  物  语  "),
-                 ("#FFD383", "|\n|                      |\n"),
-                 ("#AFD75F", "+----------------------+")])
+    print("\
+ [light_goldenrod2] ⎽⎽⎽⎽⎽\n\
+ │[on light_goldenrod2]灵 一[/on light_goldenrod2]│\n\
+ │[on light_goldenrod2]田 方[/on light_goldenrod2]│\n\
+  ⎺⎺⎺⎺⎺ [/light_goldenrod2]")
     main_menu_options = {
         "new": {
-            "name": "新游戏",
+            "name": "初入仙山",
             "callback": game.new_game
         },
         "load": {
-            "name": "载入",
+            "name": "读取进度",
             "callback": load_game
         },
         "exit": {
-            "name": "离开",
+            "name": "退出游戏",
             "callback": exit
         }
     }
