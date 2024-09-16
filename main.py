@@ -1,18 +1,17 @@
 import threading
 from rich import print
-from InquirerPy import inquirer, get_style
 from InquirerPy.utils import color_print
-from InquirerPy.base.control import Choice
+
 
 from command import process_input
 import game
 from core.player import Player
 from core import timer
+from core.prompt import select
 
-from content.character_creation import character_creation
 
-# from content.title import title
-# print(title)
+def load_game():
+    pass
 
 
 def main_menu():
@@ -21,23 +20,24 @@ def main_menu():
                  ("#AFD75F", "  星  露  谷  物  语  "),
                  ("#FFD383", "|\n|                      |\n"),
                  ("#AFD75F", "+----------------------+")])
-    action = inquirer.select(
-        message="",
-        choices=[
-            Choice(value="new", name="新游戏"),
-            Choice(value="load", name="载入"),
-            Choice(value=None, name="离开"),
-        ],
-        default="new",
-        qmark="",
-        amark="",
-        pointer="🌱",
-        show_cursor=False,
-        transformer=lambda _: "",
-        style=get_style({"pointer": "#AFD75F"})
-    ).execute()
-    if not action:
-        exit()
+    main_menu_options = {
+        "new": {
+            "name": "新游戏",
+            "callback": game.new_game
+        },
+        "load": {
+            "name": "载入",
+            "callback": load_game
+        },
+        "exit": {
+            "name": "离开",
+            "callback": exit
+        }
+    }
+    action = select(choices=[{"name": choice["name"], "value": value}
+                             for value, choice in main_menu_options.items()], default="new")
+    if action:
+        main_menu_options[action]["callback"]()
 
 
 try:
@@ -49,10 +49,6 @@ try:
         target=timer.game_time_thread, daemon=True)
     real_time_thread = threading.Thread(
         target=timer.real_time_thread, daemon=True)
-
-    farm = game.create_room(id="farm")
-    game.player = Player()
-    # character_creation()
 
     white_radish = game.create_object(
         objectType="crop", id="white_radish", name="白萝卜")

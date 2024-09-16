@@ -2,3 +2,4 @@ rich
 cnlunar
 click
 InquirerPy
+progress

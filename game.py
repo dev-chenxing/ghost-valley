@@ -1,15 +1,19 @@
+from rich import print
 import json
 from typing import Union
+from content import intro
 from core import timer
 from core.item_stack import ItemStack
 from core.object import Crop, Object, Resource, Seed
 from core.player import Player
+from core.prompt import prompt, select
 from core.reference import Reference
 from core.room import Room
 
 objects: list[Object] = []
 player: Player = None
 rooms: list[Room] = []
+farm: Room
 
 
 def get_item_count(item: Object):
@@ -102,6 +106,7 @@ def save_game(file: str = "quicksave"):
 def create_room(id: str):
     room = Room(id=id)
     rooms.append(room)
+    return room
 
 
 def get_room(id: str):
@@ -109,3 +114,25 @@ def get_room(id: str):
         return next(room for room in rooms if room.id is id)
     except:
         return None
+
+
+def character_creation():
+    genders = [{"name": "男", "value": False}, {"name": "女", "value": True}]
+    # player.female = select(message="请选择你的性别", choices=genders)
+    # player.name = prompt(
+    #     "请输入你的名称", same_line=True, bold=True)
+    # farm.name = prompt("请输入农场的名称", same_line=True, bold=True)
+    # player.favourite_thing = prompt("请输入你最喜欢的东西", same_line=True, bold=True)
+    # pet = select(message="喜好的动物", choices=[
+    #              {"name": "🐈 猫", "value": "cat"}, {"name": "🐕 狗", "value": "dog"}])
+    return select(message="是否跳过开场剧情", suffix="？", choices=[
+        {"name": "是", "value": True}, {"name": "否", "value": False}])
+
+
+def new_game():
+    global farm, player
+    farm = create_room(id="farm")
+    player = Player()
+    skip_intro = character_creation()
+    if not skip_intro:
+        intro.cutscene()

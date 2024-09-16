@@ -1,8 +1,9 @@
 
 
 class Room:
-    def __init__(self, id):
-        self.id = id
+    def __init__(self, id: str):
+        self.id: str = id
+        self.name = id
         self.plants: list = []
 
     def to_json(self):
