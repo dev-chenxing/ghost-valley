@@ -7,6 +7,7 @@ from core.item_stack import ItemStack
 from core.object import Crop, Object, Resource, Seed
 from core.player import Player
 from core.prompt import prompt, select
+from core.quest import Quest
 from core.reference import Reference
 from core.room import Room
 
@@ -14,6 +15,7 @@ objects: list[Object] = []
 player: Player = None
 rooms: list[Room] = []
 farm: Room
+quests: list[Quest] = []
 
 
 def get_item_count(item: Object):
@@ -138,3 +140,28 @@ def new_game():
     # if not skip_intro:
     if True:
         intro.cutscene()
+
+
+def get_quest(id: str):
+    try:
+        return next(quest for quest in quests if quest.id == id)
+    except:
+        return None
+
+
+def update_quest(id: str, stage: int):
+    quest = get_quest(id)
+    print(f"[yellow1]！接取任务【{quest.id}】[/yellow1]：{quest.stages[stage]}")
+
+
+def create_quest(id: str, stages: dict[int, str]):
+    global quests
+    quests.append(Quest(id=id, stages=stages))
+
+
+def position_room(room: Union[Room, str, list[int]]):
+    if isinstance(room, Room):
+        player.room = room
+    elif isinstance(room, str):
+        player.room = get_room(id=room)
+    print(f"[bold]{player.room.id}[/bold]")

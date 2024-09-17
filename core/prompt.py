@@ -58,14 +58,14 @@ def say(who: str = None, action: str = "", text: str = None, hint: bool = False)
         exit(0)
 
 
-def select(choices: Union[list[dict], list[str]], message: str = None, default: str = None, suffix: str = ":", who: str = None) -> str:
-    who_color = f"bold {get_character_color(who, mode="hex")}"
+def select(choices: Union[list[dict], list[str]], text: str = None, default: str = None, suffix: str = ":", who: str = None) -> str:
+    who_color = get_character_color(who, mode="hex")
     who_text = f"{who}:" if who else ""
     suffix = "" if who else suffix
-    qmark = "> " if message else ""
-    qmark = f"{qmark}{who_text}" if who else qmark
+    qmark = "> " if text else ""
+    qmark = who_text if who else qmark
     amark = qmark
-    main_text = f"{message}{suffix}" if message else ""
+    main_text = f"{text}{suffix}" if text else ""
     main_text = f"“{main_text}”" if who else main_text
     choice_list = [Choice(name=choice, value=i) if isinstance(choice, str) else Choice(name=choice["name"], value=choice["value"])
                    for i, choice in enumerate(choices)]
@@ -77,9 +77,9 @@ def select(choices: Union[list[dict], list[str]], message: str = None, default: 
         amark=amark,
         pointer="🌱",
         show_cursor=False,
-        transformer=None if message else lambda _: "",
+        transformer=None if text else lambda _: "",
         style=get_style(
-            {"pointer": "#AFD75F", "question": "bold", "answered_question": "bold", "answer": "#AFD75F", "questionmark": who_color, "answermark": who_color})
+            {"pointer": "#AFD75F", "question": "" if who else "bold", "answered_question": "" if who else "bold", "answer": "#AFD75F", "questionmark": who_color, "answermark": who_color})
     ).execute()
 
 
