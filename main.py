@@ -19,7 +19,7 @@ def main_menu():
  [light_goldenrod2] ⎽⎽⎽⎽⎽\n\
  │[on light_goldenrod2]灵 一[/on light_goldenrod2]│\n\
  │[on light_goldenrod2]田 方[/on light_goldenrod2]│\n\
-  ⎺⎺⎺⎺⎺ [/light_goldenrod2]")
+  ⎺⎺⎺⎺⎺ [/light_goldenrod2]", end="")
     main_menu_options = {
         "new": {
             "name": "初入仙山",

@@ -1,3 +1,4 @@
+from typing import Union
 import click
 from rich import print
 from rich.console import Console
@@ -5,6 +6,9 @@ from rich.spinner import Spinner
 import time
 from InquirerPy import inquirer, get_style
 from InquirerPy.base.control import Choice
+from InquirerPy.utils import color_print
+
+from lib import palette
 
 console = Console()
 
@@ -33,8 +37,12 @@ def prompt(text: str, default: str = None, suffix: str = "：", show_choices: bo
                 print(invalid_text)
 
 
-def get_character_color(id: str) -> str:
-    return "light_goldenrod2"
+def get_character_color(id: str, mode: str = "name") -> str:
+    color = "light_goldenrod2"
+    if mode == "name":
+        return color
+    elif mode == "hex":
+        return palette.get(color)["hex"]
 
 
 def say(who: str = None, action: str = "", text: str = None, hint: bool = False):
@@ -50,19 +58,28 @@ def say(who: str = None, action: str = "", text: str = None, hint: bool = False)
         exit(0)
 
 
-def select(choices: list[dict], message: str = None, default: str = None, suffix: str = ":") -> str:
+def select(choices: Union[list[dict], list[str]], message: str = None, default: str = None, suffix: str = ":", who: str = None) -> str:
+    who_color = f"bold {get_character_color(who, mode="hex")}"
+    who_text = f"{who}:" if who else ""
+    suffix = "" if who else suffix
+    qmark = "> " if message else ""
+    qmark = f"{qmark}{who_text}" if who else qmark
+    amark = qmark
+    main_text = f"{message}{suffix}" if message else ""
+    main_text = f"“{main_text}”" if who else main_text
+    choice_list = [Choice(name=choice, value=i) if isinstance(choice, str) else Choice(name=choice["name"], value=choice["value"])
+                   for i, choice in enumerate(choices)]
     return inquirer.select(
-        message=f"{message}{suffix}" if message else "",
-        choices=map(lambda choice: Choice(
-            name=choice["name"], value=choice["value"]), choices),
+        message=main_text,
+        choices=choice_list,
         default=default,
-        qmark=">" if message else "",
-        amark=">" if message else "",
+        qmark=qmark,
+        amark=amark,
         pointer="🌱",
         show_cursor=False,
         transformer=None if message else lambda _: "",
         style=get_style(
-            {"pointer": "#AFD75F", "question": "bold", "answered_question": "bold"})
+            {"pointer": "#AFD75F", "question": "bold", "answered_question": "bold", "answer": "#AFD75F", "questionmark": who_color, "answermark": who_color})
     ).execute()
 
 

@@ -1,5 +1,0 @@
-- [ ] get character text color
-- [ ] 下山剧情
-- [ ] 天灵根
-- [ ] 杀得越多，吸收到的魔气越多
-- [ ] birthday
