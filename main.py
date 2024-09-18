@@ -1,3 +1,5 @@
+import os
+from pathlib import Path
 import threading
 from rich import print
 from InquirerPy.utils import color_print
@@ -8,18 +10,26 @@ import game
 from core.player import Player
 from core import timer
 from core.prompt import select
+from content.title import title
 
 
 def load_game():
     pass
 
 
+def save_file_exists():
+    saves_dir = "saves"
+    if not os.path.isdir(saves_dir):
+        os.makedirs(saves_dir)
+    for dir_entry in os.scandir(saves_dir):
+        if dir_entry.is_file():
+            path = Path(dir_entry.name)
+            if path.suffix == ".json":
+                return True
+
+
 def main_menu():
-    print("\
- [light_goldenrod2] ⎽⎽⎽⎽⎽\n\
- │[on light_goldenrod2]灵 一[/on light_goldenrod2]│\n\
- │[on light_goldenrod2]田 方[/on light_goldenrod2]│\n\
-  ⎺⎺⎺⎺⎺ [/light_goldenrod2]", end="")
+    print(title, end="")
     main_menu_options = {
         "new": {
             "name": "初入仙山",
@@ -27,13 +37,18 @@ def main_menu():
         },
         "load": {
             "name": "读取进度",
-            "callback": load_game
+            "callback": load_game,
+            "condition": save_file_exists
         },
         "exit": {
             "name": "退出游戏",
             "callback": exit
         }
     }
+    choices = []
+    for value, choice in main_menu_options.items():
+        if "condition" not in choice or choice["condition"]():
+            choices.append({"name": choice["name"], "value": value})
     action = select(choices=[{"name": choice["name"], "value": value}
                              for value, choice in main_menu_options.items()], default="new")
     if action:

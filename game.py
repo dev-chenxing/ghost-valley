@@ -148,8 +148,14 @@ def load():
             if path.suffix == ".py":
                 stem = path.stem
                 room = importlib.import_module(f"content.rooms.{stem}")
-                r = create_room(id=stem, grid_x=room.grid_x,
-                                grid_y=room.grid_y, callback=room.callback)
+                r = create_room(
+                    id=stem,
+                    grid_x=room.grid_x,
+                    grid_y=room.grid_y,
+                    callback=room.callback,
+                    can_change_room=room.can_change_room if hasattr(
+                        room, "can_change_room") else None
+                )
 
 
 def new_game():
@@ -179,9 +185,9 @@ def update_quest(id: str, stage: int = None, finished: bool = False):
         quest.stage = stage
 
 
-def create_quest(id: str, stages: dict[int, str]):
+def create_quest(id: str, stages: dict[int, str], description: str = None):
     global quests
-    quests.append(Quest(id=id, stages=stages))
+    quests.append(Quest(id=id, stages=stages, description=description))
 
 
 def position_room(room: Union[Room, str, list[int]]):

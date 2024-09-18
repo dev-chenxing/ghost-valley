@@ -19,8 +19,15 @@ def callback():
     # print("")
     # say(text="使用命令[东][南][西][北]可操作角色行走")
     # say(text="向[bold]北[/bold]走前往[bold]大殿[/bold]，和其他人一起等候通禀吧。")
-    game.create_quest(id="初入归云", stages={
-        1: "向北走前往大殿处等候"
+    game.create_quest(id="初入归云", description="应左长老之约前往归云派拜入山门。", stages={
+        1: "向北走前往归云派大殿处等候"
     })
     print("")
     game.update_quest(id="初入归云", stage=1)
+
+
+def can_change_room():
+    if game.get_quest("初入归云").finished:
+        return True
+    else:
+        print("现在不是闲逛的时候，先去殿前等候吧。")
