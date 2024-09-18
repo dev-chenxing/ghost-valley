@@ -1,6 +1,9 @@
 from rich import print
 import json
 from typing import Union
+from pathlib import Path
+import os
+import importlib
 from content import intro
 from core import timer
 from core.item_stack import ItemStack
@@ -94,14 +97,15 @@ def get_rooms_json():
 
 def save_game(file: str = "quicksave"):
     data = {
-        "player": {"coins": player.coins,
-                   "inventory": get_inventory_json(player.inventory)},
-        "rooms": get_rooms_json(),
-        "game_time": timer.game_time.time,
-        "real_time": timer.real_time.time
+        # "player": {"coins": player.coins,
+        #            "inventory": get_inventory_json(player.inventory)},
+        # "rooms": get_rooms_json(),
+        # "game_time": timer.game_time.time,
+        # "real_time": timer.real_time.time
     }
     with open(f'saves/{file}.json', "w") as save_file:
         json.dump(data, save_file)
+    print("已存储游戏")
 
 
 def create_room(id: str, **kwargs):
@@ -137,24 +141,30 @@ def character_creation():
 
 
 def load():
-    from pathlib import Path
-    import re
-    import os
-    import importlib
-
     for dir_entry in os.scandir("content/rooms"):
         if dir_entry.is_file():
             path = Path(dir_entry.name)
             if path.suffix == ".py":
                 stem = path.stem
                 room = importlib.import_module(f"content.rooms.{stem}")
-                r = create_room(
+                create_room(
                     id=stem,
                     grid_x=room.grid_x,
                     grid_y=room.grid_y,
                     callback=room.callback,
                     can_change_room=room.can_change_room if hasattr(
                         room, "can_change_room") else None
+                )
+    for dir_entry in os.scandir("content/quests"):
+        if dir_entry.is_file():
+            path = Path(dir_entry.name)
+            if path.suffix == ".py":
+                stem = path.stem
+                quest = importlib.import_module(f"content.quests.{stem}")
+                create_quest(
+                    id=stem,
+                    description=quest.description,
+                    stages=quest.stages
                 )
 
 
@@ -169,6 +179,7 @@ def new_game():
 
 
 def get_quest(id: str):
+    global quests
     try:
         return next(quest for quest in quests if quest.id == id)
     except:

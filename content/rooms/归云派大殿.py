@@ -11,14 +11,14 @@ def callback():
     # say(who="李梦卿", text="那当然，这还只是外门的接待区，我听说他们内门的建筑更恢弘呢！")
     # say(who="张铭", text="那这入门的要求会不会很高？")
     # say(who="陈远舟", text="凡事不可强求，我们尽力而为，顺其自然就好。")
-    # game.update_quest(id="初入归云", finished=True)
-    # say(who="纪瑶华", text="这位道友，你也是来加入归云派的吧？")
-    # answer = select(who="纪瑶华", text="我看你神情自若，似乎对入门考核很有把握，你难道不紧张吗？",
-    #                 choices=["呃，我就不参加了。", "我注定会成为归云派的一员。"])
-    # if answer == "呃，我就不参加了。":
-    #     pass
-    # else:
-    #     say(who="纪瑶华", text="哈哈，看来道友很有信心呀。那祝你顺利通过考核。")
+    game.update_quest(id="初入归云", finished=True)
+    say(who="纪瑶华", text="这位道友，你也是来加入归云派的吧？")
+    answer = select(who="纪瑶华", text="我看你神情自若，似乎对入门考核很有把握，你难道不紧张吗？",
+                    choices=["呃，我就不参加了。", "我注定会成为归云派的一员。"])
+    if answer == 0:
+        say(who="纪瑶华", text="道友可别怯场呀。来都来了，不试试又怎知自己不行？")
+    else:
+        say(who="纪瑶华", text="哈哈，看来道友很有信心呀。那祝你顺利通过考核。")
     # say(who="李兴", text="诶？你们看天上那是什么？")
     # say(text="众人正说话间，突然天地变色，电闪雷鸣。")
     # say(text="随即地动山摇，火雨天降，宛如末日来临一般。")

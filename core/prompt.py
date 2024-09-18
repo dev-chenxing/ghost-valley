@@ -45,10 +45,14 @@ def get_character_color(id: str, mode: str = "name") -> str:
         return palette.get(color)["hex"]
 
 
-def say(who: str = None, action: str = "", text: str = None, hint: bool = False):
+def say(who: str = None, action: str = "", text: str = None, hint: bool = False, no_quotation: bool = False):
     color = get_character_color(who)
     who_text = f"[{color}]{who}[/{color}]" if who else ""
-    main_text = f"：“{text}”" if who else text
+    main_text = text
+    if who:
+        if not no_quotation:
+            main_text = f"“{text}”"
+        main_text = f"：{text}"
     hint_text = "[bright_black]请按回车键继续[/bright_black]" if hint else ""
     print(f"{who_text}{action}{main_text}{hint_text}", end="")
     try:
