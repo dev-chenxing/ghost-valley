@@ -5,8 +5,9 @@ class Room:
         self.id: str = id
         self.name = id
         self.plants: list = []
-        self.x = kwargs["x"] if "x" in kwargs else None
-        self.y = kwargs["y"] if "y" in kwargs else None
+        self.grid_x = kwargs["grid_x"]
+        self.grid_y = kwargs["grid_y"]
+        self.callback =  kwargs["callback"]
 
     def to_json(self):
         plants = list(map(lambda plant: plant.to_json(), self.plants))

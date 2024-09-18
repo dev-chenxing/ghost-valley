@@ -6,7 +6,7 @@ from core import timer
 from core.item_stack import ItemStack
 from core.object import Crop, Object, Resource, Seed
 from core.player import Player
-from core.prompt import prompt, select
+from core.prompt import prompt, select, spinner
 from core.quest import Quest
 from core.reference import Reference
 from core.room import Room
@@ -116,7 +116,7 @@ def get_room(id: str = None, x: int = None, y: int = None):
             for room in rooms:
                 if (id and id == room.id):
                     return room
-                elif (x == room.x and y == room.y):
+                elif (x == room.grid_x and y == room.grid_y):
                     return room
     except:
         return None
@@ -136,7 +136,24 @@ def character_creation():
         {"name": "是", "value": True}, {"name": "否", "value": False}])
 
 
+def load():
+    from pathlib import Path
+    import re
+    import os
+    import importlib
+
+    for dir_entry in os.scandir("content/rooms"):
+        if dir_entry.is_file():
+            path = Path(dir_entry.name)
+            if path.suffix == ".py":
+                stem = path.stem
+                room = importlib.import_module(f"content.rooms.{stem}")
+                r = create_room(id=stem, grid_x=room.grid_x,
+                                grid_y=room.grid_y, callback=room.callback)
+
+
 def new_game():
+    load()
     global player
     player = Player()
     # skip_intro = character_creation()
@@ -152,9 +169,14 @@ def get_quest(id: str):
         return None
 
 
-def update_quest(id: str, stage: int):
+def update_quest(id: str, stage: int = None, finished: bool = False):
     quest = get_quest(id)
-    print(f"[yellow1]！接取任务【{quest.id}】[/yellow1]：{quest.stages[stage]}")
+    if finished:
+        print(f"[yellow1]！【{quest.id}】任务完成[/yellow1]")
+        quest.finished = True
+    else:
+        print(f"[yellow1]！接取任务【{quest.id}】[/yellow1]：{quest.stages[stage]}")
+        quest.stage = stage
 
 
 def create_quest(id: str, stages: dict[int, str]):
@@ -169,4 +191,7 @@ def position_room(room: Union[Room, str, list[int]]):
         player.room = get_room(id=room)
     elif isinstance(room, list):
         player.room = get_room(x=room[0], y=room[1])
+    print("")
+    spinner(text="载入中...", seconds=1)
     print(f"[bold]{player.room.id}[/bold]")
+    player.room.callback()
