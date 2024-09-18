@@ -14,7 +14,6 @@ from core.room import Room
 objects: list[Object] = []
 player: Player = None
 rooms: list[Room] = []
-farm: Room
 quests: list[Quest] = []
 
 
@@ -105,15 +104,20 @@ def save_game(file: str = "quicksave"):
         json.dump(data, save_file)
 
 
-def create_room(id: str):
-    room = Room(id=id)
+def create_room(id: str, **kwargs):
+    room = Room(id=id, **kwargs)
     rooms.append(room)
     return room
 
 
-def get_room(id: str):
+def get_room(id: str = None, x: int = None, y: int = None):
     try:
-        return next(room for room in rooms if room.id is id)
+        if id or (x != None) and (y != None):
+            for room in rooms:
+                if (id and id == room.id):
+                    return room
+                elif (x == room.x and y == room.y):
+                    return room
     except:
         return None
 
@@ -133,8 +137,7 @@ def character_creation():
 
 
 def new_game():
-    global farm, player
-    farm = create_room(id="farm")
+    global player
     player = Player()
     # skip_intro = character_creation()
     # if not skip_intro:
@@ -164,4 +167,6 @@ def position_room(room: Union[Room, str, list[int]]):
         player.room = room
     elif isinstance(room, str):
         player.room = get_room(id=room)
+    elif isinstance(room, list):
+        player.room = get_room(x=room[0], y=room[1])
     print(f"[bold]{player.room.id}[/bold]")

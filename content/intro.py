@@ -12,7 +12,8 @@ def cutscene():
     # say(text="    归云派炼丹长老 左明渊")
     # spinner(text="载入中...", seconds=1)
     # print("")
-    game.create_room(id="归云派山门")
+    game.create_room(id="归云派山门", x=0, y=0)
+    game.create_room(id="归云派大殿", x=0, y=1)
     game.position_room("归云派山门")
     # select(who="归云派弟子", text="这位道友留步，不知来我归云派所为何事？",
     #        choices=["将左长老的信物交给他查看。"])
