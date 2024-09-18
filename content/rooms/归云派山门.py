@@ -23,8 +23,5 @@ def callback():
     game.update_quest(id="初入归云", stage=1)
 
 
-def can_change_room():
-    if game.get_quest("初入归云").finished:
-        return True
-    else:
-        print("现在不是闲逛的时候，先去殿前等候吧。")
+def can_change_room(leaving: bool):
+    return True

@@ -20,4 +20,12 @@ def callback():
     game.update_quest(id="突遭变故", stage=1)
     answer = select(text="是否要存储游戏", choices=["是", "否"], suffix="？")
     if answer == 0:
-        game.save_game(file=f"{game.player.name}.json")
+        game.save_game(file=game.player.name)
+
+
+def can_change_room(leaving: bool):
+    if not leaving:
+        if game.get_quest("初入归云").finished:
+            return True
+        else:
+            print("现在不是闲逛的时候，先去殿前等候吧。")

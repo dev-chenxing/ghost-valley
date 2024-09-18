@@ -153,7 +153,7 @@ def load():
                     grid_y=room.grid_y,
                     callback=room.callback,
                     can_change_room=room.can_change_room if hasattr(
-                        room, "can_change_room") else None
+                        room, "can_change_room") else lambda leaving: True
                 )
     for dir_entry in os.scandir("content/quests"):
         if dir_entry.is_file():

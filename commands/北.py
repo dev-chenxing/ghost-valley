@@ -1,7 +1,7 @@
 from rich import print
+from commands.common.position_room import main as position_room
 import game
 
 
 def callback(args: list[str] = None):
-    room = game.player.room
-    game.position_room([room.grid_x, room.grid_y+1])
+    position_room(offset_x=0, offset_y=1)
