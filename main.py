@@ -22,13 +22,13 @@ def get_saves() -> list:
         if dir_entry.is_file():
             path = Path(dir_entry.name)
             if path.suffix == ".json":
-                saves.append(path)
+                saves.append({"value": path.stem, "name": path.stem})
     return saves
 
 
 def load_game():
     save = select(text="读取进度", choices=get_saves())
-    game.load_game(filename=save)
+    game.load_game(file=save)
 
 
 def save_file_exists():
@@ -68,13 +68,6 @@ def main_menu():
 try:
     main_menu()
 
-    timer.game_time = timer.Time()
-    timer.real_time = timer.Time()
-    game_time_thread = threading.Thread(
-        target=timer.game_time_thread, daemon=True)
-    real_time_thread = threading.Thread(
-        target=timer.real_time_thread, daemon=True)
-
     # white_radish = game.create_object(
     #     objectType="crop", id="white_radish", name="白萝卜")
     # white_radish_seed = game.create_object(
@@ -86,9 +79,6 @@ try:
     #                           id="twig", name="树枝", unit="根")
     # game.add_item(item=white_radish_seed, count=15)
     # game.add_item(item=carrot_seed)
-
-    game_time_thread.start()
-    real_time_thread.start()
 
     while True:
         cmd = input("> ")

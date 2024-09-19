@@ -1,3 +1,4 @@
+import threading
 from rich import print
 import json
 from typing import Union
@@ -15,7 +16,7 @@ from core.reference import Reference
 from core.room import Room
 
 objects: list[Object] = []
-player: Player = None
+player: Player = Player()
 rooms: list[Room] = []
 quests: list[Quest] = []
 
@@ -95,7 +96,7 @@ def get_quests_json():
     return list(map(lambda quest: quest.to_json(), quests))
 
 
-def save_game(file: str = "quicksave"):
+def save_game(file: str):
     data = {
         "player": {"surname": player.surname, "given_name": player.given_name, "name": player.name, "room": player.room.id},
         "quests": get_quests_json(),
@@ -107,8 +108,26 @@ def save_game(file: str = "quicksave"):
     print("存档成功")
 
 
-def load_game(filename: str):
-    pass
+def load_game(file: str):
+    load()
+    with open(f'saves/{file}.json', encoding='utf8') as save_file:
+        data = json.load(save_file)
+    player.surname = data["player"]["surname"]
+    player.given_name = data["player"]["given_name"]
+    player.name = data["player"]["name"]
+    position_room(get_room(data["player"]["room"]))
+    for quest_data in data["quests"]:
+        quest = get_quest(quest_data["id"])
+        quest.stage = quest_data["stage"]
+        quest.finished = quest_data["finished"]
+    timer.game_time = timer.Time(init_time=data["game_time"])
+    timer.real_time = timer.Time()
+    game_time_thread = threading.Thread(
+        target=timer.game_time_thread, daemon=True)
+    real_time_thread = threading.Thread(
+        target=timer.real_time_thread, daemon=True)
+    game_time_thread.start()
+    real_time_thread.start()
 
 
 def create_room(id: str, **kwargs):
@@ -173,8 +192,14 @@ def load():
 
 def new_game():
     load()
-    global player
-    player = Player()
+    timer.game_time = timer.Time()
+    timer.real_time = timer.Time()
+    game_time_thread = threading.Thread(
+        target=timer.game_time_thread, daemon=True)
+    real_time_thread = threading.Thread(
+        target=timer.real_time_thread, daemon=True)
+    game_time_thread.start()
+    real_time_thread.start()
     # skip_intro = character_creation()
     # if not skip_intro:
     if True:

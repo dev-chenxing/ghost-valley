@@ -12,3 +12,5 @@ def main(offset_x: int, offset_y: int):
         x=room_from.grid_x+offset_x, y=room_from.grid_y+offset_y)
     if can_change_room(room_from=room_from, room_to=room_to):
         game.position_room(room_to)
+    else:
+        print("cannot change room")
