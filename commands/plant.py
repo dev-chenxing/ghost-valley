@@ -1,6 +1,8 @@
 import re
 import game
-import commands.田 as 田
+import commands.field as 田
+
+name = "种"
 
 
 def callback(args: list[str]):

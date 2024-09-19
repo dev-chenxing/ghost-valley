@@ -151,7 +151,7 @@ def load():
                 stem = path.stem
                 room = importlib.import_module(f"content.rooms.{stem}")
                 create_room(
-                    id=stem,
+                    id=room.id,
                     grid_x=room.grid_x,
                     grid_y=room.grid_y,
                     callback=room.callback,
@@ -165,7 +165,7 @@ def load():
                 stem = path.stem
                 quest = importlib.import_module(f"content.quests.{stem}")
                 create_quest(
-                    id=stem,
+                    id=quest.id,
                     description=quest.description,
                     stages=quest.stages
                 )

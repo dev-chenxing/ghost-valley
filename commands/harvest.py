@@ -3,6 +3,8 @@ import game
 from lib.chinese_number import 中文数字
 from rich import print
 
+name = "收获"
+
 
 def callback(args: list[str] = None):
     farm = game.get_room(id="farm")

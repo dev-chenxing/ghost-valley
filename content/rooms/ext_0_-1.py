@@ -1,7 +1,7 @@
 from core.prompt import say, select
 import game
 
-
+id = "归云派山下"
 grid_x = 0
 grid_y = -1
 

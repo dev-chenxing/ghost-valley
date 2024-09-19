@@ -1,6 +1,7 @@
 from rich import print
 import game
 
+name = "背篓"
 
 def callback(args: list[str] = None):
     item_stack_strings: list[str] = []

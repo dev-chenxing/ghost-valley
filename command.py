@@ -11,9 +11,10 @@ for dir_entry in os.scandir(cmd_dir):
         path = Path(dir_entry.name)
         if path.suffix == ".py":
             stem = path.stem
+            command = importlib.import_module(f"{cmd_dir}.{stem}")
             commands.append({
-                "name": stem,
-                "callback": importlib.import_module(f"{cmd_dir}.{stem}").callback
+                "name": command.name,
+                "callback": command.callback
             })
 
 
