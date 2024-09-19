@@ -91,21 +91,24 @@ def get_inventory_json(inventory: list[ItemStack]):
     return list(map(lambda item_stack: item_stack.to_json(), inventory))
 
 
-def get_rooms_json():
-    return list(map(lambda room: room.to_json(), rooms))
+def get_quests_json():
+    return list(map(lambda quest: quest.to_json(), quests))
 
 
 def save_game(file: str = "quicksave"):
     data = {
-        # "player": {"coins": player.coins,
-        #            "inventory": get_inventory_json(player.inventory)},
-        # "rooms": get_rooms_json(),
-        # "game_time": timer.game_time.time,
-        # "real_time": timer.real_time.time
+        "player": {"surname": player.surname, "given_name": player.given_name, "name": player.name, "room": player.room.id},
+        "quests": get_quests_json(),
+        "game_time": timer.game_time.time,
+        "real_time": timer.real_time.time
     }
-    with open(f'saves/{file}.json', "w") as save_file:
-        json.dump(data, save_file)
-    print("已存储游戏")
+    with open(f'saves/{file}.json', "w", encoding='utf8') as save_file:
+        json.dump(data, save_file, ensure_ascii=False)
+    print("存档成功")
+
+
+def load_game(filename: str):
+    pass
 
 
 def create_room(id: str, **kwargs):

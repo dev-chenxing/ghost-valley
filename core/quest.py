@@ -5,3 +5,10 @@ class Quest:
         self.stages: dict[int, str] = stages
         self.finished: bool = False
         self.description: str = description
+
+    def to_json(self):
+        return {
+            "id": self.id,
+            "stage": self.stage,
+            "finished": self.finished
+        }

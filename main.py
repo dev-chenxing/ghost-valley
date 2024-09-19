@@ -13,11 +13,8 @@ from core.prompt import select
 from content.title import title
 
 
-def load_game():
-    pass
-
-
-def save_file_exists():
+def get_saves() -> list:
+    saves = []
     saves_dir = "saves"
     if not os.path.isdir(saves_dir):
         os.makedirs(saves_dir)
@@ -25,7 +22,21 @@ def save_file_exists():
         if dir_entry.is_file():
             path = Path(dir_entry.name)
             if path.suffix == ".json":
-                return True
+                saves.append(path)
+    return saves
+
+
+def load_game():
+    save = select(text="读取进度", choices=get_saves())
+    game.load_game(filename=save)
+
+
+def save_file_exists():
+    saves = get_saves()
+    if saves == []:
+        return False
+    else:
+        return True
 
 
 def main_menu():
@@ -47,10 +58,9 @@ def main_menu():
     }
     choices = []
     for value, choice in main_menu_options.items():
-        if "condition" not in choice or choice["condition"]():
+        if ("condition" not in choice) or choice["condition"]():
             choices.append({"name": choice["name"], "value": value})
-    action = select(choices=[{"name": choice["name"], "value": value}
-                             for value, choice in main_menu_options.items()], default="new")
+    action = select(choices=choices, default="new")
     if action:
         main_menu_options[action]["callback"]()
 
@@ -58,12 +68,12 @@ def main_menu():
 try:
     main_menu()
 
-    # timer.game_time = timer.Time()
-    # timer.real_time = timer.Time()
-    # game_time_thread = threading.Thread(
-    #     target=timer.game_time_thread, daemon=True)
-    # real_time_thread = threading.Thread(
-    #     target=timer.real_time_thread, daemon=True)
+    timer.game_time = timer.Time()
+    timer.real_time = timer.Time()
+    game_time_thread = threading.Thread(
+        target=timer.game_time_thread, daemon=True)
+    real_time_thread = threading.Thread(
+        target=timer.real_time_thread, daemon=True)
 
     # white_radish = game.create_object(
     #     objectType="crop", id="white_radish", name="白萝卜")
@@ -77,10 +87,8 @@ try:
     # game.add_item(item=white_radish_seed, count=15)
     # game.add_item(item=carrot_seed)
 
-    # game.save_game()
-
-    # game_time_thread.start()
-    # real_time_thread.start()
+    game_time_thread.start()
+    real_time_thread.start()
 
     while True:
         cmd = input("> ")
