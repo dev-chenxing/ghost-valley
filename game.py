@@ -103,9 +103,15 @@ def save_game(file: str):
         "game_time": timer.game_time.time,
         "real_time": timer.real_time.time
     }
-    with open(f'saves/{file}.json', "w", encoding='utf8') as save_file:
+    with open(f'saves/{file}-{timer.game_time.time}.json', "w", encoding='utf8') as save_file:
         json.dump(data, save_file, ensure_ascii=False)
     print("存档成功")
+
+
+def print_quests():
+    for quest in quests:
+        if not quest.finished:
+            print(f"[bold]{quest.id}[/bold]：{quest.stages[quest.stage]}")
 
 
 def load_game(file: str):
@@ -115,7 +121,6 @@ def load_game(file: str):
     player.surname = data["player"]["surname"]
     player.given_name = data["player"]["given_name"]
     player.name = data["player"]["name"]
-    position_room(get_room(data["player"]["room"]))
     for quest_data in data["quests"]:
         quest = get_quest(quest_data["id"])
         quest.stage = quest_data["stage"]
@@ -128,6 +133,7 @@ def load_game(file: str):
         target=timer.real_time_thread, daemon=True)
     game_time_thread.start()
     real_time_thread.start()
+    position_room(get_room(data["player"]["room"]))
 
 
 def create_room(id: str, **kwargs):
@@ -151,15 +157,10 @@ def get_room(id: str = None, x: int = None, y: int = None):
 def character_creation():
     print("[bold]主角设定[/bold]")
     genders = [{"name": "男", "value": False}, {"name": "女", "value": True}]
-    player.female = select(message="性别", choices=genders)
+    player.female = select(text="性别", choices=genders)
     player.surname = prompt("姓", same_line=True, bold=True)
     player.given_name = prompt("名", same_line=True, bold=True)
     player.name = f"{player.surname}{player.given_name}"
-    # player.favourite_thing = prompt("请输入你最喜欢的东西", same_line=True, bold=True)
-    # pet = select(message="喜好的动物", choices=[
-    #              {"name": "🐈 猫", "value": "cat"}, {"name": "🐕 狗", "value": "dog"}])
-    return select(message="是否跳过开场剧情", suffix="？", choices=[
-        {"name": "是", "value": True}, {"name": "否", "value": False}])
 
 
 def load():
@@ -175,7 +176,7 @@ def load():
                     grid_y=room.grid_y,
                     callback=room.callback,
                     can_change_room=room.can_change_room if hasattr(
-                        room, "can_change_room") else lambda leaving: True
+                        room, "can_change_room") else lambda room_from=None, room_to=None: True
                 )
     for dir_entry in os.scandir("content/quests"):
         if dir_entry.is_file():
@@ -200,18 +201,23 @@ def new_game():
         target=timer.real_time_thread, daemon=True)
     game_time_thread.start()
     real_time_thread.start()
-    # skip_intro = character_creation()
-    # if not skip_intro:
-    if True:
-        intro.cutscene()
+    character_creation()
+    intro.cutscene()
 
 
 def get_quest(id: str):
     global quests
     try:
-        return next(quest for quest in quests if quest.id == id)
+        for quest in quests:
+            if quest.id == id:
+                return quest
     except:
         return None
+
+
+def get_quest_stage(id: str):
+    quest = get_quest(id=id)
+    return quest.stage if quest else 0
 
 
 def update_quest(id: str, stage: int = None, finished: bool = False):

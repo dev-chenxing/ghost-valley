@@ -1,42 +1,16 @@
-import os
-from pathlib import Path
-import threading
 from rich import print
-from InquirerPy.utils import color_print
 
 
 from command import process_input
 import game
-from core.player import Player
-from core import timer
 from core.prompt import select
 from content.title import title
-
-
-def get_saves() -> list:
-    saves = []
-    saves_dir = "saves"
-    if not os.path.isdir(saves_dir):
-        os.makedirs(saves_dir)
-    for dir_entry in os.scandir(saves_dir):
-        if dir_entry.is_file():
-            path = Path(dir_entry.name)
-            if path.suffix == ".json":
-                saves.append({"value": path.stem, "name": path.stem})
-    return saves
+from utils import get_saves, save_file_exists
 
 
 def load_game():
     save = select(text="读取进度", choices=get_saves())
     game.load_game(file=save)
-
-
-def save_file_exists():
-    saves = get_saves()
-    if saves == []:
-        return False
-    else:
-        return True
 
 
 def main_menu():

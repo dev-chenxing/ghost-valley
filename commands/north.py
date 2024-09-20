@@ -6,4 +6,4 @@ name = "北"
 
 
 def callback(args: list[str] = None):
-    position_room(offset_x=0, offset_y=1)
+    position_room(direction="北")

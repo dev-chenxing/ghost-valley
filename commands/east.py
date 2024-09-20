@@ -4,7 +4,8 @@ import game
 from commands.common.position_room import main as position_room
 
 
-name = "南"
+name = "东"
+
 
 def callback(args: list[str] = None):
-    position_room(direction="南")
+    position_room(direction="东")

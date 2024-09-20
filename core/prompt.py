@@ -64,11 +64,10 @@ def select(choices: Union[list[dict], list[str]], text: str = None, default: str
     who_color = get_character_color(who, mode="hex")
     who_text = f"{who}:" if who else ""
     suffix = "" if who else suffix
-    qmark = "> " if text else ""
+    qmark = ">" if text else ""
     qmark = who_text if who else qmark
     amark = qmark
     main_text = f"{text}{suffix}" if text else ""
-    main_text = f"“{main_text}”" if who else main_text
     choice_list = [Choice(name=choice, value=i) if isinstance(choice, str) else Choice(name=choice["name"], value=choice["value"])
                    for i, choice in enumerate(choices)]
     return inquirer.select(

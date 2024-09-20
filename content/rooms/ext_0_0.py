@@ -1,4 +1,5 @@
 from core.prompt import say, select
+from core.room import Room
 import game
 
 id = "归云派山门"
@@ -23,5 +24,9 @@ def callback():
     game.update_quest(id="初入归云", stage=1)
 
 
-def can_change_room(leaving: bool):
+def can_change_room(room_to: Room = None, room_from: Room = None):
+    if room_to.id != "归云派大殿":
+        if not game.get_quest("初入归云").finished:
+            print("现在不是闲逛的时候，先去殿前等候吧。")
+            return False
     return True
