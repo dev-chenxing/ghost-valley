@@ -1,7 +1,6 @@
 from core.prompt import say, select
 from core.room import Room
 import game
-from utils import save_file_exists
 
 id = "归云派山下"
 grid_x = 0
@@ -26,10 +25,24 @@ def callback():
         answer = select(text="是否要存储游戏", choices=["是", "否"], suffix="？")
         if answer == 0:
             game.save_game(file=game.player.name)
+    if 突遭变故 == 1:
+        say(who="陈远舟", text="跑到这里应该就安全了吧。")
+        say(who="陈远舟", text="各位没有受伤吧？")
+        say(who="卫泓", text="人是没事，就是吓得半死。")
+        say(who="纪瑶华", text="那道奇异的光……似乎是有高人相助我们才得以逃脱。")
+        select(who="纪瑶华", text="不过方才有一人逆行冲上去了，他不会有事吧？",
+               choices=["把杨子勤的话告诉众人。"])
+        say(who="陈远舟", text="此等危急时刻弃之而去实在太不道义，我去帮他们。")
+        say(who="卫泓", text="我也去。")
+        say(who="纪瑶华", text="救人要紧，你快去找大夫吧。")
 
 
 def can_change_room(room_to: Room = None, room_from: Room = None):
     if room_to.id == "归云派山门":
-        print("上山的路已被落石堵得严严实实")
+        突遭变故 = game.get_quest_stage(id="突遭变故")
+        if 突遭变故 < 2:
+            say(who="杨子勤", text="姑娘请留步，此刻山顶情况凶险难料，万不可以以身犯险。")
+        elif 突遭变故 == 2:
+            say(text="此刻山顶情况凶险难料，还是不要上去了。")
         return False
     return True

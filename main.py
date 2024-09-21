@@ -1,4 +1,7 @@
-from rich import print
+import sys
+import threading
+import time
+from rich import print as rprint
 
 
 from command import process_input
@@ -13,9 +16,19 @@ def load_game():
     game.load_game(file=save)
 
 
+def continue_game():
+    save = get_saves()[0]["value"]
+    game.load_game(file=save)
+
+
 def main_menu():
-    print(title, end="")
+    rprint(title, end="")
     main_menu_options = {
+        "continue": {
+            "name": "再续前缘",
+            "callback": continue_game,
+            "condition": save_file_exists
+        },
         "new": {
             "name": "初入仙山",
             "callback": game.new_game
@@ -39,24 +52,37 @@ def main_menu():
         main_menu_options[action]["callback"]()
 
 
+def rumor():
+    msg = "something"
+    while True:
+        with threading.Lock():
+            print("\x1b[s\x1b[1A\x1b[999D\x1b[1S\x1b[L" +
+                  msg+"\x1b[u", end="", flush=True)
+            time.sleep(2)
+
+
+def user_input():
+    try:
+        while True:
+            cmd = input("> ")
+            process_input(cmd)
+    except EOFError as e:
+        rprint(":x: 退出")
+        sys.exit(1)
+
+
 try:
     main_menu()
 
-    # white_radish = game.create_object(
-    #     objectType="crop", id="white_radish", name="白萝卜")
-    # white_radish_seed = game.create_object(
-    #     objectType="seed", id="white_radish_seed", name="白萝卜种子", crop="white_radish")
-    # carrot = game.create_object(objectType="crop", id="carrot", name="胡萝卜")
-    # carrot_seed = game.create_object(
-    #     objectType="seed", id="carrot_seed", name="胡萝卜种子", crop="carrot")
-    # twig = game.create_object(objectType="resource",
-    #                           id="twig", name="树枝", unit="根")
-    # game.add_item(item=white_radish_seed, count=15)
-    # game.add_item(item=carrot_seed)
+    rumor_thread = threading.Thread(target=rumor, daemon=True)
+    input_thread = threading.Thread(target=user_input, daemon=True)
+
+    # rumor_thread.start()
+    input_thread.start()
 
     while True:
-        cmd = input("> ")
-        process_input(cmd)
+        pass
 
 except (KeyboardInterrupt, SystemExit):
-    print(":x: 退出")
+    rprint(":x: 退出")
+    sys.exit(1)

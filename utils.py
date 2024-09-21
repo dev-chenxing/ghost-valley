@@ -3,6 +3,8 @@ import os
 from pathlib import Path
 import datetime
 import cnlunar
+import bisect
+
 from lib.chinese_number import 中文数字
 
 
@@ -84,18 +86,18 @@ def get_saves() -> list:
     saves_dir = "saves"
     if not os.path.isdir(saves_dir):
         os.makedirs(saves_dir)
-    index = 1
     for dir_entry in os.scandir(saves_dir):
         if dir_entry.is_file():
             path = Path(dir_entry.name)
             if path.suffix == ".json":
                 with open(os.path.join(saves_dir, dir_entry.name), encoding='utf8') as save_file:
                     data = json.load(save_file)
-                    name = f"{index}. {data["player"]["name"]} {
+                    name = f"{data["player"]["name"]} {
                         format_time(data["game_time"], style="short")}"
-                    saves.append(
-                        {"value": path.stem, "name": name})
-                    index += 1
+                    bisect.insort(saves, {"value": path.stem, "name": name,
+                                  "timestamp": data["timestamp"]}, key=lambda save: save["timestamp"])
+    saves = [{"value": save["value"], "name": f"{index+1}. {save["name"]}"}
+             for index, save in enumerate(saves)]
     return saves
 
 

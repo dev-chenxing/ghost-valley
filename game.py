@@ -1,4 +1,5 @@
 import threading
+import time
 from rich import print
 import json
 from typing import Union
@@ -101,7 +102,7 @@ def save_game(file: str):
         "player": {"surname": player.surname, "given_name": player.given_name, "name": player.name, "room": player.room.id},
         "quests": get_quests_json(),
         "game_time": timer.game_time.time,
-        "real_time": timer.real_time.time
+        "timestamp": int(time.time())
     }
     with open(f'saves/{file}-{timer.game_time.time}.json', "w", encoding='utf8') as save_file:
         json.dump(data, save_file, ensure_ascii=False)
