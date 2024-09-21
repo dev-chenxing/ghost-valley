@@ -20,6 +20,7 @@ objects: list[Object] = []
 player: Player = Player()
 rooms: list[Room] = []
 quests: list[Quest] = []
+idle_talk: list[dict] = []
 
 
 def get_item_count(item: Object):

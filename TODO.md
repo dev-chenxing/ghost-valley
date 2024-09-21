@@ -1,2 +1,2 @@
-- [ ] rumors say(who="陈远舟", text="跑到这里应该就安全了吧。")
+- [ ] idle_talk say(who="陈远舟", text="跑到这里应该就安全了吧。")
 - [ ] 东边落霞客栈

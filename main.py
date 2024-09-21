@@ -52,12 +52,22 @@ def main_menu():
         main_menu_options[action]["callback"]()
 
 
-def rumor():
-    msg = "something"
+save_pos = "\x1b[s"
+restore_pos = "\x1b[u"
+insert_line = "\x1b[L"
+def cursor_up(n: int): return f"\x1b[{n}A"
+def cursor_left(n: int): return f"\x1b[{n}D"
+def scroll_up(n: int): return f"\x1b[{n}S"
+
+
+def idle_talk():
+    text = "hello world"
     while True:
+        # if game.idle_talk:
+        #     text = game.idle_talk.pop(0)
         with threading.Lock():
-            print("\x1b[s\x1b[1A\x1b[999D\x1b[1S\x1b[L" +
-                  msg+"\x1b[u", end="", flush=True)
+            print(f"{save_pos}{cursor_up(1)}{cursor_left(999)}{scroll_up(1)}{insert_line}{
+                text}{restore_pos}", end="", flush=True)
             time.sleep(2)
 
 
@@ -74,10 +84,10 @@ def user_input():
 try:
     main_menu()
 
-    rumor_thread = threading.Thread(target=rumor, daemon=True)
+    idle_talk_thread = threading.Thread(target=idle_talk, daemon=True)
     input_thread = threading.Thread(target=user_input, daemon=True)
 
-    # rumor_thread.start()
+    idle_talk_thread.start()
     input_thread.start()
 
     while True:
