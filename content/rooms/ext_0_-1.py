@@ -2,7 +2,7 @@ from core.prompt import say, select, idle_talk
 from core.room import Room
 import game
 
-id = "归云派山下"
+id = "归云派山脚"
 grid_x = 0
 grid_y = -1
 
