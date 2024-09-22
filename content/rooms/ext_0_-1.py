@@ -1,4 +1,4 @@
-from core.prompt import say, select
+from core.prompt import say, select, idle_talk
 from core.room import Room
 import game
 
@@ -26,15 +26,15 @@ def callback():
         if answer == 0:
             game.save_game(file=game.player.name)
     if 突遭变故 == 1:
-        say(who="陈远舟", text="跑到这里应该就安全了吧。")
-        say(who="陈远舟", text="各位没有受伤吧？")
-        say(who="卫泓", text="人是没事，就是吓得半死。")
-        say(who="纪瑶华", text="那道奇异的光……似乎是有高人相助我们才得以逃脱。")
-        select(who="纪瑶华", text="不过方才有一人逆行冲上去了，他不会有事吧？",
-               choices=["把杨子勤的话告诉众人。"])
-        say(who="陈远舟", text="此等危急时刻弃之而去实在太不道义，我去帮他们。")
-        say(who="卫泓", text="我也去。")
-        say(who="纪瑶华", text="救人要紧，你快去找大夫吧。")
+        idle_talk(who="陈远舟", text="跑到这里应该就安全了吧。")
+        idle_talk(who="陈远舟", text="各位没有受伤吧？")
+        idle_talk(who="卫泓", text="人是没事，就是吓得半死。")
+        idle_talk(who="纪瑶华", text="那道奇异的光……似乎是有高人相助我们才得以逃脱。")
+        # select(who="纪瑶华", text="不过方才有一人逆行冲上去了，他不会有事吧？",
+        #        choices=["把杨子勤的话告诉众人。"])
+        # say(who="陈远舟", text="此等危急时刻弃之而去实在太不道义，我去帮他们。")
+        # say(who="卫泓", text="我也去。")
+        # say(who="纪瑶华", text="救人要紧，你快去找大夫吧。")
 
 
 def can_change_room(room_to: Room = None, room_from: Room = None):

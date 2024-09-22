@@ -1,16 +1,20 @@
 import sys
 import threading
 import time
-from os import system
-system("")
+from rich import print as rprint
+from rich.text import Text
 
 
 def screen_output():
-    msg = "something"
+    who = "hello"
+    text = "world"
     while True:
         with threading.Lock():
-            print("\x1b[s\x1b[1A\x1b[999D\x1b[1S\x1b[L" +
-                  msg+"\x1b[u", end="", flush=True)
+            # rprint(Text("\x1b[s\x1b[1A\x1b[999D\x1b[1S\x1b[L" + "[red]" +
+            #             who + "[/red]" + text + "\x1b[u"), end="", flush=True)
+            rprint(Text("\x1b[s\x1b[1A\x1b[999D\x1b[1S\x1b[L"), end="")
+            rprint(Text(who+": ", style="light_goldenrod2"), end="")
+            rprint(Text(text + "\x1b[u"), end="", flush=True)
             time.sleep(2)
 
 

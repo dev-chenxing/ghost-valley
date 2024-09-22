@@ -1,12 +1,12 @@
+from rich.text import Text
+from rich import print as rprint
 import sys
 import threading
 import time
-from rich import print as rprint
-
 
 from command import process_input
 import game
-from core.prompt import select
+from core.prompt import get_character_color, select
 from content.title import title
 from utils import get_saves, save_file_exists
 
@@ -47,7 +47,7 @@ def main_menu():
     for value, choice in main_menu_options.items():
         if ("condition" not in choice) or choice["condition"]():
             choices.append({"name": choice["name"], "value": value})
-    action = select(choices=choices, default="new")
+    action = select(choices=choices, default="continue")
     if action:
         main_menu_options[action]["callback"]()
 
@@ -61,14 +61,19 @@ def scroll_up(n: int): return f"\x1b[{n}S"
 
 
 def idle_talk():
-    text = "hello world"
     while True:
-        # if game.idle_talk:
-        #     text = game.idle_talk.pop(0)
-        with threading.Lock():
-            print(f"{save_pos}{cursor_up(1)}{cursor_left(999)}{scroll_up(1)}{insert_line}{
-                text}{restore_pos}", end="", flush=True)
-            time.sleep(2)
+        if game.idle_talk:
+            idle_talk_info = game.idle_talk.pop(0)
+            who, text = idle_talk_info["who"], idle_talk_info["text"]
+            with threading.Lock():
+                time.sleep(1)
+                rprint(Text(f"{save_pos}{cursor_up(1)}{cursor_left(999)}{
+                       scroll_up(1)}{insert_line}"), end="")
+                if who:
+                    rprint(
+                        Text(f"{who}：", style=get_character_color(who)), end="")
+                rprint(Text(text + restore_pos), end="", flush=True)
+                time.sleep(2)
 
 
 def user_input():
