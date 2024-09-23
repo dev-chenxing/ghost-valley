@@ -1,3 +1,4 @@
+import importlib
 import json
 import os
 from pathlib import Path
@@ -107,3 +108,16 @@ def save_file_exists():
         return False
     else:
         return True
+
+
+def get_languages() -> list:
+    languages = []
+    i18n_dir = "i18n"
+    for dir_entry in os.scandir(i18n_dir):
+        if dir_entry.is_file():
+            path = Path(dir_entry.name)
+            if path.suffix == ".py":
+                translation = importlib.import_module(f"i18n.{path.stem}")
+                languages.append(
+                    {"value": path.stem, "name": translation.language_name})
+    return languages

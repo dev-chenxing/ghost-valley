@@ -1,3 +1,4 @@
+import importlib
 from rich.text import Text
 from rich import print as rprint
 import sys
@@ -7,8 +8,13 @@ import time
 from command import process_input
 import game
 from core.prompt import get_character_color, select
-from content.title import title
-from utils import get_saves, save_file_exists
+import settings
+from utils import get_languages, get_saves, save_file_exists
+
+
+def i18n(attr: str):
+    translation = importlib.import_module(f"i18n.{settings.language}")
+    return getattr(translation, attr)
 
 
 def load_game():
@@ -21,8 +27,14 @@ def continue_game():
     game.load_game(file=save)
 
 
+def settings_menu():
+    language = select(text="游戏语言", choices=get_languages())
+    settings.language = language
+    main_menu()
+
+
 def main_menu():
-    rprint(title, end="")
+    rprint(i18n("title"), end="")
     main_menu_options = {
         "continue": {
             "name": "再续前缘",
@@ -37,6 +49,10 @@ def main_menu():
             "name": "读取进度",
             "callback": load_game,
             "condition": save_file_exists
+        },
+        "load": {
+            "name": "游戏设置",
+            "callback": settings_menu
         },
         "exit": {
             "name": "退出游戏",

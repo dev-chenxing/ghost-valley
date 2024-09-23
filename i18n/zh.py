@@ -1,3 +1,4 @@
+language_name = "简体中文"
 title = "\
  [light_goldenrod2] ⎽⎽⎽⎽⎽\n\
  │[on light_goldenrod2]灵 一[/on light_goldenrod2]│\n\
