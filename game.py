@@ -15,6 +15,7 @@ from core.prompt import prompt, select, spinner
 from core.quest import Quest
 from core.reference import Reference
 from core.room import Room
+from utils import i18n
 
 objects: list[Object] = []
 player: Player = Player()
@@ -107,7 +108,7 @@ def save_game(file: str):
     }
     with open(f'saves/{file}-{timer.game_time.time}.json', "w", encoding='utf8') as save_file:
         json.dump(data, save_file, ensure_ascii=False)
-    print("存档成功")
+    print(i18n("saved"))
 
 
 def print_quests():
@@ -157,11 +158,15 @@ def get_room(id: str = None, x: int = None, y: int = None):
 
 
 def character_creation():
-    print("[bold]主角设定[/bold]")
-    genders = [{"name": "男", "value": False}, {"name": "女", "value": True}]
-    player.female = select(text="性别", choices=genders)
-    player.surname = prompt("姓", same_line=True, bold=True)
-    player.given_name = prompt("名", same_line=True, bold=True)
+    print(f"[bold]{i18n("character_creation")}[/bold]")
+    genders = [{"name": i18n("character_creation_male"), "value": False}, {
+        "name": i18n("character_creation_female"), "value": True}]
+    player.female = select(
+        text=i18n("character_creation_gender"), choices=genders)
+    player.surname = prompt(
+        i18n("character_creation_last_name"), same_line=True, bold=True)
+    player.given_name = prompt(
+        i18n("character_creation_first_name"), same_line=True, bold=True)
     player.name = f"{player.surname}{player.given_name}"
 
 
@@ -225,10 +230,11 @@ def get_quest_stage(id: str):
 def update_quest(id: str, stage: int = None, finished: bool = False):
     quest = get_quest(id)
     if finished:
-        print(f"[yellow1]！【{quest.id}】任务完成[/yellow1]")
+        print(f"[yellow1]！【{quest.id}】{i18n("quest_finished")}[/yellow1]")
         quest.finished = True
     else:
-        print(f"[yellow1]！接取任务【{quest.id}】[/yellow1]：{quest.stages[stage]}")
+        print(f"[yellow1]！{i18n("quest_received")}【{
+              quest.id}】[/yellow1]：{quest.stages[stage]}")
         quest.stage = stage
 
 
@@ -245,6 +251,6 @@ def position_room(room: Union[Room, str, list[int]]):
     elif isinstance(room, list):
         player.room = get_room(x=room[0], y=room[1])
     print("")
-    spinner(text="载入中...", seconds=1)
+    spinner(text=f"{i18n("loading")}...", seconds=1)
     print(f"[bold]{player.room.id}[/bold]")
     player.room.callback()

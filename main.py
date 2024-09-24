@@ -9,16 +9,11 @@ from command import process_input
 import game
 from core.prompt import get_character_color, select
 import settings
-from utils import get_languages, get_saves, save_file_exists
-
-
-def i18n(attr: str):
-    translation = importlib.import_module(f"i18n.{settings.language}")
-    return getattr(translation, attr)
+from utils import get_languages, get_saves, i18n, save_file_exists
 
 
 def load_game():
-    save = select(text="读取进度", choices=get_saves())
+    save = select(text=i18n("main_menu_load"), choices=get_saves())
     game.load_game(file=save)
 
 
@@ -28,7 +23,7 @@ def continue_game():
 
 
 def settings_menu():
-    language = select(text="游戏语言", choices=get_languages())
+    language = select(text=i18n("main_menu_language"), choices=get_languages())
     settings.language = language
     main_menu()
 
@@ -37,25 +32,25 @@ def main_menu():
     rprint(i18n("title"), end="")
     main_menu_options = {
         "continue": {
-            "name": "再续前缘",
+            "name": i18n("main_menu_continue"),
             "callback": continue_game,
             "condition": save_file_exists
         },
         "new": {
-            "name": "初入仙山",
+            "name": i18n("main_menu_new"),
             "callback": game.new_game
         },
         "load": {
-            "name": "读取进度",
+            "name": i18n("main_menu_load"),
             "callback": load_game,
             "condition": save_file_exists
         },
         "load": {
-            "name": "游戏设置",
+            "name": i18n("main_menu_settings"),
             "callback": settings_menu
         },
-        "exit": {
-            "name": "退出游戏",
+        "quit": {
+            "name": i18n("main_menu_quit"),
             "callback": exit
         }
     }
@@ -98,7 +93,7 @@ def user_input():
             cmd = input("> ")
             process_input(cmd)
     except EOFError as e:
-        rprint(":x: 退出")
+        rprint(f":x: {i18n("main_menu_quit")}")
         sys.exit(1)
 
 
@@ -115,5 +110,5 @@ try:
         pass
 
 except (KeyboardInterrupt, SystemExit):
-    rprint(":x: 退出")
+    rprint(f":x: {i18n("main_menu_quit")}")
     sys.exit(1)

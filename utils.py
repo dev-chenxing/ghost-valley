@@ -7,6 +7,7 @@ import cnlunar
 import bisect
 
 from lib.chinese_number import 中文数字
+import settings
 
 
 def get_month(month: int) -> str:
@@ -121,3 +122,8 @@ def get_languages() -> list:
                 languages.append(
                     {"value": path.stem, "name": translation.language_name})
     return languages
+
+
+def i18n(attr: str):
+    translation = importlib.import_module(f"i18n.{settings.language}")
+    return getattr(translation, attr)
