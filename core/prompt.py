@@ -9,6 +9,7 @@ from InquirerPy.base.control import Choice
 
 import game
 from lib import palette
+from utils import i18n
 
 console = Console()
 
@@ -37,21 +38,22 @@ def prompt(text: str, default: str = None, suffix: str = "：", show_choices: bo
                 print(invalid_text)
 
 
-def get_character_color(id: str, mode: str = "name") -> str:
-    color = "light_goldenrod2"
-    if mode == "name":
-        return color
-    elif mode == "hex":
-        return palette.get(color)["hex"]
+def replace_text_defines(text):
+    return text.replace("%pcname", game.player.name)
 
 
 def say(who: str = None, text: str = None, hint: bool = False):
-    color = get_character_color(who)
-    who_text = f"[{color}]{who}[/{color}]" if who else ""
+    text = replace_text_defines(text)
+    if who:
+        npc = game.get_object(id=who)
+        color = npc.color
+        who_text = f"[{color}]{i18n(who)}[/{color}]"
+    else:
+        who_text = ""
     main_text = text
     if who:
         main_text = f"：{text}"
-    hint_text = "[bright_black]请按回车键继续[/bright_black]" if hint else ""
+    hint_text = f"[bright_black]{i18n("hint")}[/bright_black]" if hint else ""
     print(f"{who_text}{main_text}{hint_text}", end="")
     try:
         click.prompt(text="", prompt_suffix="", default="",
@@ -65,8 +67,13 @@ def idle_talk(who: str, text: str):
 
 
 def select(choices: Union[list[dict], list[str]], text: str = None, default: str = None, suffix: str = ":", who: str = None) -> str:
-    who_color = get_character_color(who, mode="hex")
-    who_text = f"{who}:" if who else ""
+    if who:
+        npc = game.get_object(id=who)
+        color = palette.get(npc.color)["hex"]
+        who_text = f"{i18n(npc.name)}:"
+    else:
+        who_text = ""
+        color = ""
     suffix = "" if who else suffix
     qmark = ">" if text else ""
     qmark = who_text if who else qmark
@@ -84,7 +91,7 @@ def select(choices: Union[list[dict], list[str]], text: str = None, default: str
         show_cursor=False,
         transformer=None if text else lambda _: "",
         style=get_style(
-            {"pointer": "#AFD75F", "question": "" if who else "bold", "answered_question": "" if who else "bold", "answer": "#AFD75F", "questionmark": who_color, "answermark": who_color})
+            {"pointer": "#AFD75F", "question": "" if who else "bold", "answered_question": "" if who else "bold", "answer": "#AFD75F", "questionmark": color, "answermark": color})
     ).execute()
 
 

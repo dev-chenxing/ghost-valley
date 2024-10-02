@@ -1,7 +1,9 @@
 from core.prompt import say, select
 import game
+from utils import i18n
 
 id = "归云派大殿"
+name = "归云派大殿"
 grid_x = 0
 grid_y = 1
 

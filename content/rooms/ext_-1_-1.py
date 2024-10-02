@@ -1,7 +1,9 @@
 from core.prompt import say, select, spinner
 import game
+from utils import i18n
 
 id = "回春堂"
+name = "回春堂"
 grid_x = -1
 grid_y = -1
 

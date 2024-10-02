@@ -9,6 +9,7 @@ import importlib
 from content import intro
 from core import timer
 from core.item_stack import ItemStack
+from core.npc import NPC
 from core.object import Crop, Object, Resource, Seed
 from core.player import Player
 from core.prompt import prompt, select, spinner
@@ -71,7 +72,9 @@ def harvest(plant: Reference):
 
 def create_object(objectType: str, id: str, **kwargs):
     object: Object = None
-    if objectType == "seed":
+    if objectType == "npc":
+        object = NPC(id=id, **kwargs)
+    elif objectType == "seed":
         object = Seed(id=id, **kwargs)
     elif objectType == "crop":
         object = Crop(id=id, **kwargs)
@@ -167,10 +170,24 @@ def character_creation():
         i18n("character_creation_last_name"), same_line=True, bold=True)
     player.given_name = prompt(
         i18n("character_creation_first_name"), same_line=True, bold=True)
-    player.name = f"{player.surname}{player.given_name}"
+    player.name = i18n("_get_character_name", surname=player.surname,
+                       given_name=player.given_name)
 
 
 def load():
+    for dir_entry in os.scandir("content/npcs"):
+        if dir_entry.is_file():
+            path = Path(dir_entry.name)
+            if path.suffix == ".py":
+                stem = path.stem
+                npc = importlib.import_module(f"content.npcs.{stem}")
+                create_object(
+                    objectType="npc",
+                    id=npc.id,
+                    name=npc.name,
+                    color=npc.color,
+                    female=npc.female
+                )
     for dir_entry in os.scandir("content/rooms"):
         if dir_entry.is_file():
             path = Path(dir_entry.name)
@@ -234,7 +251,7 @@ def update_quest(id: str, stage: int = None, finished: bool = False):
         quest.finished = True
     else:
         print(f"[yellow1]！{i18n("quest_received")}【{
-              quest.id}】[/yellow1]：{quest.stages[stage]}")
+              i18n(quest.id)}】[/yellow1]：{quest.stages[stage]}")
         quest.stage = stage
 
 
@@ -252,5 +269,5 @@ def position_room(room: Union[Room, str, list[int]]):
         player.room = get_room(x=room[0], y=room[1])
     print("")
     spinner(text=f"{i18n("loading")}...", seconds=1)
-    print(f"[bold]{player.room.id}[/bold]")
+    print(f"[bold]{i18n(player.room.name)}[/bold]")
     player.room.callback()

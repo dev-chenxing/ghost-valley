@@ -7,7 +7,7 @@ import time
 
 from command import process_input
 import game
-from core.prompt import get_character_color, select
+from core.prompt import select
 import settings
 from utils import get_languages, get_saves, i18n, save_file_exists
 
@@ -81,8 +81,9 @@ def idle_talk():
                 rprint(Text(f"{save_pos}{cursor_up(1)}{cursor_left(999)}{
                        scroll_up(1)}{insert_line}"), end="")
                 if who:
+                    npc = game.get_object(id=who)
                     rprint(
-                        Text(f"{who}：", style=get_character_color(who)), end="")
+                        Text(f"{who}：", style=npc.color), end="")
                 rprint(Text(text + restore_pos), end="", flush=True)
                 time.sleep(2)
 

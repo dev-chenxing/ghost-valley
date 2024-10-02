@@ -1,4 +1,5 @@
 import importlib
+from inspect import isfunction
 import json
 import os
 from pathlib import Path
@@ -124,6 +125,15 @@ def get_languages() -> list:
     return languages
 
 
-def i18n(attr: str):
-    translation = importlib.import_module(f"i18n.{settings.language}")
-    return getattr(translation, attr)
+def i18n(attr: str, **kwargs):
+    translation_module = importlib.import_module(f"i18n.{settings.language}")
+    if hasattr(translation_module, attr):
+        translation = getattr(translation_module, attr)
+    else:
+        translation_module = importlib.import_module(
+            f"i18n.{settings.default_language}")
+        translation = getattr(translation_module, attr)
+    if isfunction(translation):
+        return translation(**kwargs)
+    else:
+        return translation
