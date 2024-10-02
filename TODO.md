@@ -1,1 +1,1 @@
-- [ ] translation for cmds
+- [ ] localize `say(who="卫泓", text="这大殿可真气派。")`
