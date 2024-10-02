@@ -38,7 +38,7 @@ intro_cutscene_04 = "  Respectfully, Zuo Mingyuan, Guiyun Sect Elder of Alchemy 
 
 归云派山门 = "Guiyun Sect"
 归云派大殿 = "Guiyun Sect Main Hall"
-归云派山脚 = "归云派山脚"
+归云派山脚 = "Guiyun Sect Foothill"
 回春堂 = "回春堂"
 落霞客栈 = "落霞客栈"
 

@@ -1,1 +1,1 @@
-- [ ] translation 
+- [ ] translation for cmds

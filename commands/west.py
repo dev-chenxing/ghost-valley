@@ -5,7 +5,7 @@ from commands.common.position_room import main as position_room
 
 
 name = "西"
-
+alias = "west"
 
 def callback(args: list[str] = None):
     position_room(direction="西")

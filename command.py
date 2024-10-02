@@ -16,6 +16,11 @@ for dir_entry in os.scandir(cmd_dir):
                 "name": command.name,
                 "callback": command.callback
             })
+            if hasattr(command, "alias"):
+                commands.append({
+                    "name": command.alias,
+                    "callback": command.callback
+                })
 
 
 def get_command(input: str):
